@@ -1,13 +1,8 @@
-import LoginPage from '@/pages/LoginPage.vue'
-
 const routes = [
   {
-    name: 'DashboardPage',
-    path: '/dashboard',
-    meta: {
-      requiredAuth: true
-    },
-    component: () => import('@/pages/DashboardPage.vue')
+    path: '/vacancy',
+    name: 'VacancyList',
+    component: () => import('@/pages/VacancyList.vue')
   },
   {
     name: 'LoginPage',
@@ -15,12 +10,22 @@ const routes = [
     meta: {
       requiredAuth: false
     },
-    component: LoginPage
+    component: () => import('@/pages/LoginPage.vue')
   },
+  // System
   {
     path: '/',
-    redirect: '/dashboard',
-  }
+    redirect: '/vacancy',
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFoundPage",
+    component: () => import("@/pages/NotFoundPage.vue"),
+    meta: {
+      requiresAuth: false,
+      layout: "system",
+    },
+  },
 ]
 
 export default routes;
