@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full max-w-7xl px-4 py-8 md:py-16 sm:px-6 lg:px-8">
+  <div class="">
     <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
       Вакансии
     </h1>
