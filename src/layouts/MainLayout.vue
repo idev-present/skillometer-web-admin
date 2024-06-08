@@ -165,7 +165,7 @@
 
 <script setup>
 import { RouterView } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -189,12 +189,13 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 
 const navigation = [
-  { name: 'Вакансии', href: '/vacancy', icon: HomeIcon, current: true },
+  { name: 'Вакансии', href: '/vacancies', icon: HomeIcon, current: true },
   { name: 'Новости', href: '/news', icon: UsersIcon, current: false },
   { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  { name: 'Calendar', href: '/schedule', icon: CalendarIcon, current: false },
   { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
 ]
@@ -209,4 +210,16 @@ const userNavigation = [
 ]
 
 const sidebarOpen = ref(false)
+
+const dictionaryStore = useDictionaryStore()
+
+onMounted(() => {
+  dictionaryStore.fillCurrencyList()
+  dictionaryStore.fillCityList()
+  dictionaryStore.fillEmploymentTypeList()
+  dictionaryStore.fillDivisionList()
+  dictionaryStore.fillQualificationList()
+  dictionaryStore.fillSkillList()
+})
+
 </script>

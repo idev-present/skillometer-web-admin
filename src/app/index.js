@@ -8,13 +8,16 @@ const app = createApp(App)
 import store from '@/app/store/index.js'
 import router from '@/app/router/index.js'
 import Toast from "vue-toastification";
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 app.use(store)
 app.use(router)
 app.use(Toast, {})
+app.use(CKEditor)
 
 // init styles
 import '@/app/assets/styles/tailwind.css'
+import '@/app/assets/styles/vendor.css'
 import "vue-toastification/dist/index.css";
 
 // init middlewares
