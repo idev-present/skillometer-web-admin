@@ -7,6 +7,7 @@
     {{ label }}
   </div>
   <ckeditor
+    class="rounded-sm"
     :editor="ClassicEditor"
     :model-value="modelValue"
     @update:modelValue=updateValue

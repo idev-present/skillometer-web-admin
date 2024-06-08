@@ -146,6 +146,10 @@ import BaseSelect from '@/shared/BaseSelect.vue'
 import BaseCheckbox from '@/shared/BaseCheckbox.vue'
 import BaseCombobox from '@/shared/BaseCombobox.vue'
 import BaseContentEditor from '@/shared/BaseContentEditor.vue'
+import { useVacancyStore } from '@/app/store/modules/vacancy.js'
+import { decamelize } from '@/shared/utils/keyConverter.js'
+
+const vacancyStore = useVacancyStore()
 
 const route = useRoute()
 const {
@@ -169,6 +173,7 @@ const employmentType = ref(null)
 const division = ref(null)
 const skill = ref([])
 const qualification = ref(null)
+const loading = ref(false)
 
 const title = computed(() => {
   if (route.params?.operation === 'edit') {
@@ -181,22 +186,31 @@ const title = computed(() => {
 })
 
 const createVacancy = () => {
+  const skillSet = skill?.value || []
   const data = {
     name: name.value,
     salaryFrom: salaryFrom.value,
     salaryTo: salaryTo.value,
-    currency: currency.value,
+    currency: currency.value?.key,
     isRemote: isRemote.value,
     description: description.value,
     team: team.value,
     todo: todo.value,
-    cityId: city.value?.id,
+    cityId: city.value?.value,
     employmentTypeId: employmentType.value?.id,
     divisionId: division.value?.id,
     qualificationId: qualification.value?.id,
-    skillSet: skill.value?.id
+    skillSet: skillSet.map((el) => el?.id).join(',')
   }
+  const preparedData = decamelize(data)
   console.log(data)
+  loading.value = true
+  vacancyStore.createVacancy(preparedData)
+    .then((res) => {
+      console.log(res)
+  })
+    .finally(() => loading.value = false)
+
 }
 
 </script>
