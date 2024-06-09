@@ -9,14 +9,19 @@
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div class="col-span-4">
             <BaseInput
+              :message="errors?.name"
               v-model="name"
               label="Название вакансии"
+              @on-focus="clearError('name')"
             />
           </div>
           <div class="col-span-4">
             <BaseTextarea
               v-model="description"
+              :status="errors?.description ? 'error' : 'info'"
+              :message="errors?.description"
               label="Описание вакансии"
+              @on-focus="clearError('description')"
             />
           </div>
         </div>
@@ -44,6 +49,8 @@
               label="Валюта"
               :items="currencyList"
               v-model="currency"
+              :message="errors?.currency"
+              @on-focus="clearError('currency')"
             />
           </div>
         </div>
@@ -53,6 +60,8 @@
               <BaseContentEditor
                 label="Требования к кандидату"
                 v-model="todo"
+                :message="errors?.todo"
+                @on-focus="clearError('todo')"
               />
             </div>
           </div>
@@ -62,6 +71,8 @@
             <BaseContentEditor
               label="О компании"
               v-model="team"
+              :message="errors?.team"
+              @on-focus="clearError('team')"
             />
           </div>
         </div>
@@ -71,6 +82,8 @@
               label="Город"
               :items="cityList"
               v-model="city"
+              :message="errors?.cityId"
+              @on-focus="clearError('cityId')"
             />
           </div>
 
@@ -81,6 +94,8 @@
               label="Тип занятности"
               :items="employmentTypeList"
               v-model="employmentType"
+              :message="errors?.employmentTypeId"
+              @on-focus="clearError('employmentTypeId')"
             />
           </div>
 
@@ -89,6 +104,9 @@
               label="Специализация"
               :items="divisionList"
               v-model="division"
+              :message="errors?.divisionId"
+              @on-focus="clearError('divisionId')"
+
             />
           </div>
 
@@ -105,6 +123,8 @@
               label="Квалификация"
               :items="qualificationList"
               v-model="qualification"
+              :message="errors?.qualificationId"
+              @on-focus="clearError('qualificationId')"
             />
           </div>
 
@@ -115,8 +135,10 @@
                 label="Скилл"
                 :items="skillList"
                 v-model="skill"
+                :message="errors?.skillSet"
+                @on-focus="clearError('skillSet')"
               />
-              <span class="text-sm text-gray-500">Выбрано: {{skill.length}}</span>
+              <span v-if="skill.length" class="text-sm text-gray-500">Выбрано: {{skill.length}}</span>
             </div>
           </div>
         </div>
@@ -148,6 +170,7 @@ import BaseCombobox from '@/shared/BaseCombobox.vue'
 import BaseContentEditor from '@/shared/BaseContentEditor.vue'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { decamelize } from '@/shared/utils/keyConverter.js'
+import VacancyForm from '@/widgets/forms/VacancyForm.js'
 
 const vacancyStore = useVacancyStore()
 
@@ -174,6 +197,24 @@ const division = ref(null)
 const skill = ref([])
 const qualification = ref(null)
 const loading = ref(false)
+const errors = ref({
+  name: '',
+  currency: '',
+  description: '',
+  team: '',
+  todo: '',
+  cityId: '',
+  employmentTypeId: '',
+  divisionId: '',
+  qualificationId: '',
+  skillSet: '',
+})
+
+const clearError = (field) => {
+  if (errors.value[field]) {
+    errors.value[field] = "";
+  }
+};
 
 const title = computed(() => {
   if (route.params?.operation === 'edit') {
@@ -202,15 +243,17 @@ const createVacancy = () => {
     qualificationId: qualification.value?.id,
     skillSet: skillSet.map((el) => el?.id).join(',')
   }
-  const preparedData = decamelize(data)
-  console.log(data)
-  loading.value = true
-  vacancyStore.createVacancy(preparedData)
-    .then((res) => {
-      console.log(res)
-  })
-    .finally(() => loading.value = false)
-
+  errors.value = VacancyForm.validate(data)
+  console.log(errors.value)
+  if(!errors.value && !loading.value) {
+    const preparedData = decamelize(data)
+    console.log(data)
+    loading.value = true
+    vacancyStore.createVacancy(preparedData)
+      .then((res) => {
+        console.log(res)
+      })
+      .finally(() => loading.value = false)
+  }
 }
-
 </script>

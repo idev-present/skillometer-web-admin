@@ -15,7 +15,7 @@
         class="h-20 shadow-sm block w-full focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none sm:text-sm border border-gray-300 rounded-md px-3 py-2"
         @change="updateValue"
         @input="updateValue"
-        @focus="$emit('onFocus')"
+        @focus="emit('onFocus')"
       />
     </div>
     <p v-if="message" class="mt-2 text-sm text-red-600">

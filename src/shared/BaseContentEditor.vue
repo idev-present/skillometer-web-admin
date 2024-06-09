@@ -7,15 +7,16 @@
     {{ label }}
   </div>
   <ckeditor
-    class="rounded-sm"
+    class="rounded-sm px-4"
     :editor="ClassicEditor"
     :model-value="modelValue"
-    @update:modelValue=updateValue
+    @update:modelValue="updateValue"
     :config="editorConfig"
-  >
-
-  </ckeditor>
-</template>
+    @focus="onFocus"
+  />
+  <p v-if="message" class="mt-2 text-sm text-red-600">
+    {{ message?.text || message }}
+  </p></template>
 
 <script setup>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -32,7 +33,7 @@ const editorConfig = {
     shouldNotGroupWhenFull: false
   }
 }
-const emit = defineEmits(["update:modelValue", "uploadCallback"])
+const emit = defineEmits(["update:modelValue", 'onFocus'])
 const props = defineProps({
   modelValue: {
     type: [String, Number],
@@ -46,11 +47,18 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  message: {
+    type: String,
+    default: "",
+  },
 })
 
 const updateValue = (event) => {
   console.log(event)
   emit("update:modelValue", event);
+};
+const onFocus = (event) => {
+  emit("onFocus");
 };
 
 </script>

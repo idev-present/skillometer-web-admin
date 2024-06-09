@@ -28,7 +28,10 @@
     "vue-router": "^4.3.0",
     "vue-toastification": "^2.0.0-rc.5",
     "vue3-promise-dialog": "^0.3.4",
-    "vuejs-medium-editor": "^3.1.0"
+    "vuejs-medium-editor": "^3.1.0",
+    "yup": "^1.4.0",
+    "lodash.foreach": "^4.5.0",
+    "lodash.values": "^4.3.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
