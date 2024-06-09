@@ -78,8 +78,8 @@
             <li>
               <ul role="list" class="-mx-2 space-y-1">
                 <li v-for="item in navigation" :key="item.name">
-                  <router-link :to="item.href" :class="[item.current ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
-                    <component :is="item.icon" :class="[item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
+                  <router-link :to="item.href" :class="[currentPage.includes(item.href) ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
+                    <component :is="item.icon" :class="[currentPage.includes(item.href) ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                     {{ item.name }}
                   </router-link>
                 </li>
@@ -140,7 +140,7 @@
               <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                   <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                    <router-link :to="item.href" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</router-link>
+                    <router-link :to="item.href" :class="[currentPage.includes(item.href) ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</router-link>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -159,8 +159,8 @@
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -188,11 +188,8 @@ import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 
 const navigation = [
   { name: 'Вакансии', href: '/vacancies', icon: HomeIcon, current: true },
-  { name: 'Кандидаты', href: '/applicants', icon: FolderIcon, current: false },
-  { name: 'Отклики', href: '/replies', icon: UsersIcon, current: false },
-  { name: 'Calendar', href: '/schedule', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'База резюме', href: '/applicants', icon: FolderIcon, current: false },
+  { name: 'Планирование', href: '/schedule', icon: CalendarIcon, current: false },
 ]
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
@@ -205,6 +202,12 @@ const userNavigation = [
 ]
 
 const sidebarOpen = ref(false)
+
+const route = useRoute()
+
+const currentPage = computed(() => {
+  return route.path
+})
 
 const dictionaryStore = useDictionaryStore()
 

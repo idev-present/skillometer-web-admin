@@ -18,9 +18,9 @@ const routes = [
     component: () => import('@/pages/SchedulePage.vue')
   },
   {
-    path: '/replies/:status?',
-    name: 'RepliesPage',
-    component: () => import('@/pages/RepliesPage.vue')
+    path: '/vacancies/view/:id/:status?',
+    name: 'VacancyView',
+    component: () => import('@/pages/VacancyView.vue')
   },
   {
     path: '/vacancies/:operation/:id?',

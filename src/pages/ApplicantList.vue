@@ -2,7 +2,7 @@
   <div class="">
     <div class="flex justify-between items-center">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-        Кандидаты
+        База резюме
       </h1>
 
     </div>

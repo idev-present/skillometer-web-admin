@@ -40,6 +40,15 @@
                   <div class="flex">
                     <RouterLink
                       class="text-indigo-600 hover:text-indigo-900"
+                      :to="`vacancies/view/${item.id}`"
+                    >
+                      <EyeIcon
+                        class="ml-2 w-5 cursor-pointer text-gray-600"
+                      />
+                      <span class="sr-only">, {{ item.name }}</span>
+                    </RouterLink>
+                    <RouterLink
+                      class="text-indigo-600 hover:text-indigo-900"
                       :to="`vacancies/edit/${item.id}`"
                     >
                       <PencilIcon
@@ -76,7 +85,7 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import {useVacancyStore} from "@/app/store/modules/vacancy.js";
-import { TrashIcon, PencilIcon } from "@heroicons/vue/20/solid";
+import { TrashIcon, PencilIcon, EyeIcon } from "@heroicons/vue/20/solid";
 import ConfirmModal from '@/shared/ConfirmModal.vue'
 
 const isLoading = ref(false)

@@ -4,49 +4,41 @@
     <header class="bg-gray-50 py-8">
       <div class="mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between">
         <div class="min-w-0 flex-1">
-          <nav class="flex" aria-label="Breadcrumb">
-            <ol role="list" class="flex items-center space-x-4">
-              <li>
-                <div>
-                  <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-700">Jobs</a>
-                </div>
-              </li>
-              <li>
-                <div class="flex items-center">
-                  <ChevronRightIcon class="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                  <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Engineering</a>
-                </div>
-              </li>
-            </ol>
-          </nav>
-          <h1 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Back End
-            Developer</h1>
+          <h1 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            {{data?.name || 'Не указано'}}
+          </h1>
           <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-8">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <BriefcaseIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              Full-time
+              {{data?.employmentType?.name || 'Не указано'}}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <MapPinIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              Remote
+              {{data?.isRemote ? 'Удаленно' : 'Не удаленно'}}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <CurrencyDollarIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              $120k &ndash; $140k
+              {{data?.salaryString || '-'}} {{data?.currency?.value || ''}}
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-500">
+              <AcademicCapIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+              {{data?.qualification?.name || '-'}}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <CalendarIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              Closing on January 9, 2020
+              Дата публикации: {{data?.localPublishedDate || '-'}}
             </div>
           </div>
         </div>
         <div class="mt-5 flex xl:ml-4 xl:mt-0">
           <span class="hidden sm:block">
-            <button type="button"
+            <RouterLink
+              :to="`/vacancies/edit/${data?.id}`"
+              type="button"
                     class="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <PencilIcon class="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-              Edit
-            </button>
+              Редактировать
+            </RouterLink>
           </span>
 
           <span class="ml-3 hidden sm:block">
@@ -130,7 +122,7 @@
     <main class="pb-16 pt-8">
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="px-4 sm:px-0">
-          <h2 class="text-lg font-medium text-gray-900">Кандидаты</h2>
+          <h2 class="text-lg font-medium text-gray-900">Отклики</h2>
           <!-- Tabs -->
           <div class="sm:hidden">
             <label for="tabs" class="sr-only">Select a tab</label>
@@ -180,7 +172,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   Listbox,
   ListboxButton,
@@ -197,7 +189,7 @@ import {
   CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
+  AcademicCapIcon,
   CurrencyDollarIcon,
   LinkIcon,
   MapPinIcon,
@@ -206,6 +198,7 @@ import {
 import ReplyListItem from '@/shared/ReplyListItem.vue'
 import Pagination from '@/shared/Pagination.vue'
 import { useRoute } from 'vue-router'
+import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 
 const tabs = [
   { name: 'Applied', href: 'applied', count: '2', current: false },
@@ -216,6 +209,9 @@ const tabs = [
 ]
 
 const route = useRoute()
+
+const vacancyStore = useVacancyStore()
+
 const candidates = [
   {
     name: 'Emily Selman',
@@ -229,13 +225,27 @@ const candidates = [
   // More candidates...
 ]
 const publishingOptions = [
-  { name: 'Published', description: 'This job posting can be viewed by anyone who has the link.', current: true },
-  { name: 'Draft', description: 'This job posting will no longer be publicly accessible.', current: false }
+  { name: 'Опубликована', description: 'This job posting can be viewed by anyone who has the link.', current: true },
+  { name: 'Не опубликована', description: 'This job posting will no longer be publicly accessible.', current: false }
 ]
+
+const data = ref(null)
 
 const currentTab = computed(() => {
   return route.params.status
 })
+
+onMounted(() => {
+  const id = route.params?.id
+  if(!id) {
+    throw Error('Id is not define')
+  }
+  vacancyStore.getVacancy(id)
+    .then((res) => {
+      data.value = res
+    })
+})
+
 
 const selected = ref(publishingOptions[0])
 </script>
