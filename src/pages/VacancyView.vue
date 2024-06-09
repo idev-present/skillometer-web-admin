@@ -199,6 +199,7 @@ import ReplyListItem from '@/shared/ReplyListItem.vue'
 import Pagination from '@/shared/Pagination.vue'
 import { useRoute } from 'vue-router'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
+import { useReplyStore } from '@/app/store/modules/reply.js'
 
 const tabs = [
   { name: 'Applied', href: 'applied', count: '2', current: false },
@@ -211,6 +212,8 @@ const tabs = [
 const route = useRoute()
 
 const vacancyStore = useVacancyStore()
+
+const replyStore = useReplyStore()
 
 const candidates = [
   {
@@ -230,6 +233,7 @@ const publishingOptions = [
 ]
 
 const data = ref(null)
+const replies = ref(null)
 
 const currentTab = computed(() => {
   return route.params.status
@@ -243,6 +247,10 @@ onMounted(() => {
   vacancyStore.getVacancy(id)
     .then((res) => {
       data.value = res
+      replyStore.fillReplyList()
+        .then((res) => {
+          replies.value = res
+        })
     })
 })
 
