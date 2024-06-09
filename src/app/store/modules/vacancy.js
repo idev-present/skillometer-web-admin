@@ -12,13 +12,15 @@ export const useVacancyStore = defineStore({
     state: () => {
         return {
             vacancyList: [],
-            currentVacancy: null
+            currentVacancy: null,
+            isLoading: false
         }
     },
     actions: {
         // Vacancy List
         fillVacancyList(payload = null) {
             return new Promise((resolve, reject) => {
+                this.isLoading = true
                 ApiService
                     .get("/vacancy/", payload)
                     .then((res) => {
@@ -32,11 +34,15 @@ export const useVacancyStore = defineStore({
                         toast.error(err?.message || "Ошибка загрузки списка вакансий! Пожалуйста, попробуйте позже")
                         reject()
                     })
+                  .finally(() => {
+                    this.isLoading = false
+                  })
             })
         },
         createVacancy(payload) {
             return new Promise((resolve, reject) => {
-                console.log(payload)
+              this.isLoading = true
+              console.log(payload)
                 ApiService
                   .post("/vacancy/", payload)
                   .then((res) => {
@@ -47,6 +53,9 @@ export const useVacancyStore = defineStore({
                       console.error(err)
                       toast.error(err?.message || "Ошибка создания вакансии! Пожалуйста, попробуйте позже")
                       reject()
+                  })
+                  .finally(() => {
+                    this.isLoading = false
                   })
             })
 
@@ -72,6 +81,7 @@ export const useVacancyStore = defineStore({
       },
       editVacancy(id, payload) {
         return new Promise((resolve, reject) => {
+          this.isLoading = true
           console.log(payload)
           ApiService
             .put(`/vacancy/${id}`, payload)
@@ -83,10 +93,14 @@ export const useVacancyStore = defineStore({
               toast.error(err?.message || "Ошибка редактирования вакансии! Пожалуйста, попробуйте позже")
               reject()
             })
+            .finally(() => {
+              this.isLoading = false
+            })
         })
       },
       deleteVacancy(id) {
         return new Promise((resolve, reject) => {
+          this.isLoading = true
           ApiService
             .delete(`/vacancy/${id}`)
             .then(() => {
@@ -96,6 +110,9 @@ export const useVacancyStore = defineStore({
               console.error(err)
               toast.error(err?.message || "Ошибка удаления вакансии! Пожалуйста, попробуйте позже")
               reject()
+            })
+            .finally(() => {
+              this.isLoading = false
             })
         })
       }

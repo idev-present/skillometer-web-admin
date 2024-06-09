@@ -27,6 +27,16 @@ const routes = [
     name: 'VacancyPage',
     component: () => import('@/pages/VacancyPage.vue')
   },
+  {
+    path: '/applicants',
+    name: 'ApplicantList',
+    component: () => import('@/pages/ApplicantList.vue')
+  },
+  {
+    path: '/applicants/view/:id',
+    name: 'Applicant',
+    component: () => import('@/pages/ApplicantPage.vue')
+  },
   // System
   {
     path: '/',

@@ -117,12 +117,7 @@
         <!-- Separator -->
         <div class="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
 
-        <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-          <form class="relative flex flex-1" action="#" method="GET">
-            <label for="search-field" class="sr-only">Search</label>
-            <MagnifyingGlassIcon class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400" aria-hidden="true" />
-            <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Search..." type="search" name="search" />
-          </form>
+        <div class="flex justify-end flex-1 gap-x-4 self-stretch lg:gap-x-6">
           <div class="flex items-center gap-x-4 lg:gap-x-6">
             <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
               <span class="sr-only">View notifications</span>
@@ -193,8 +188,8 @@ import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 
 const navigation = [
   { name: 'Вакансии', href: '/vacancies', icon: HomeIcon, current: true },
-  { name: 'Новости', href: '/news', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  { name: 'Кандидаты', href: '/applicants', icon: FolderIcon, current: false },
+  { name: 'Отклики', href: '/replies', icon: UsersIcon, current: false },
   { name: 'Calendar', href: '/schedule', icon: CalendarIcon, current: false },
   { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
@@ -220,6 +215,7 @@ onMounted(() => {
   dictionaryStore.fillDivisionList()
   dictionaryStore.fillQualificationList()
   dictionaryStore.fillSkillList()
+  dictionaryStore.fillSearchStatusList()
 })
 
 </script>

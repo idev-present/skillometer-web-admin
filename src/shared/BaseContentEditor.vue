@@ -20,6 +20,7 @@
 
 <script setup>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 const editorConfig = {
   toolbar: {
     items: [
@@ -63,6 +64,6 @@ const onFocus = (event) => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>

@@ -14,6 +14,7 @@ export const useDictionaryStore = defineStore({
       divisionList: [],
       qualificationList: [],
       skillList: [],
+      searchStatusList: []
     }
   },
   actions: {
@@ -130,6 +131,26 @@ export const useDictionaryStore = defineStore({
           .catch((err) => {
             console.error(err)
             toast.error(err?.message || "Ошибка загрузки списка вакансий! Пожалуйста, попробуйте позже")
+            reject()
+          })
+      })
+    },
+    fillSearchStatusList() {
+      return new Promise((resolve, reject) => {
+        ApiService
+          .get("/dict/search_status")
+          .then((res) => {
+            resolve()
+            const data = res || []
+            this.searchStatusList = data.map((item) => ({
+              ...item,
+              key: item.name,
+              value: item.id
+            })) || []
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки списка статусов! Пожалуйста, попробуйте позже")
             reject()
           })
       })

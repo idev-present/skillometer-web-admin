@@ -8,6 +8,7 @@ const {
   skillList,
 
 } = useDictionaryStore()
+
 export const vacancyBuilder = (vac) => {
   const arrSkill = vac?.skillSet?.length ? vac.skillSet.split(',') :[]
   console.log('arrSkill', arrSkill)
@@ -16,8 +17,8 @@ export const vacancyBuilder = (vac) => {
     ...vac,
     city: {
       ...city,
-      key: city.name,
-      value: city.fiasId
+      key: city?.name,
+      value: city?.fiasId
     },
     employmentType: employmentTypeList.find((item) => item?.id === vac?.employmentTypeId),
     division: divisionList.find((item) => item?.id === vac?.divisionId),
