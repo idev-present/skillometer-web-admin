@@ -1,0 +1,27 @@
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
+
+const {
+  cityList,
+  employmentTypeList,
+  divisionList,
+  qualificationList,
+  skillList,
+
+} = useDictionaryStore()
+export const vacancyBuilder = (vac) => {
+  const arrSkill = vac?.skillSet?.length ? vac.skillSet.split(',') :[]
+  console.log('arrSkill', arrSkill)
+  const city = cityList.find((item) => item?.fiasId === vac?.cityId)
+  return {
+    ...vac,
+    city: {
+      ...city,
+      key: city.name,
+      value: city.fiasId
+    },
+    employmentType: employmentTypeList.find((item) => item?.id === vac?.employmentTypeId),
+    division: divisionList.find((item) => item?.id === vac?.divisionId),
+    skill: arrSkill.map((id) => skillList.find((item) => item?.id === id)),
+    qualification: qualificationList.find((item) => item?.id === vac?.qualificationId),
+  }
+}

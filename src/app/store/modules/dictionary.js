@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import { useToast } from "vue-toastification"
 import ApiService from "@/shared/services/api.service.js"
+import { camelize } from '@/shared/utils/keyConverter.js'
 
 const toast = useToast()
 export const useDictionaryStore = defineStore({
@@ -39,11 +40,12 @@ export const useDictionaryStore = defineStore({
           .then((res) => {
             resolve()
             const data = res || []
-            this.cityList = data.map((item) => ({
+            const preparedData = data.map((item) => ({
               ...item,
               key: item.name,
               value: item.fias_id
             })) || []
+            this.cityList = camelize(preparedData)
           })
           .catch((err) => {
             console.error(err)

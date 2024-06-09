@@ -23,7 +23,7 @@ const routes = [
     component: () => import('@/pages/RepliesPage.vue')
   },
   {
-    path: '/vacancies/:id/:operation?',
+    path: '/vacancies/:operation/:id?',
     name: 'VacancyPage',
     component: () => import('@/pages/VacancyPage.vue')
   },

@@ -24,12 +24,12 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Навыки</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Дата</th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                  <span class="sr-only">Edit</span>
+                  <span class="sr-only">Actions</span>
                 </th>
               </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="(item, index) in vacancyList" :key="index">
+              <tr v-for="(item, index) in vacancies" :key="index">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ item.name }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.salaryFrom }} - {{item?.salaryTo}}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.email }}</td>
@@ -37,13 +37,22 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.role }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.role }}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <RouterLink
-                    class="text-indigo-600 hover:text-indigo-900"
-                    :to="`vacancies/${item.id}/edit`"
-                  >
-                    Edit
-                    <span class="sr-only">, {{ item.name }}</span>
-                  </RouterLink>
+                  <div class="flex">
+                    <RouterLink
+                      class="text-indigo-600 hover:text-indigo-900"
+                      :to="`vacancies/edit/${item.id}`"
+                    >
+                      <PencilIcon
+                        class="ml-2 w-5 cursor-pointer text-gray-600"
+                      />
+                      <span class="sr-only">, {{ item.name }}</span>
+                    </RouterLink>
+                    <TrashIcon
+                      class="ml-2 w-5 cursor-pointer text-gray-600"
+                      @click="onRemove(item.id)"
+                    />
+                  </div>
+
                 </td>
               </tr>
               </tbody>
@@ -52,29 +61,66 @@
         </div>
       </div>
     </div>
+    <ConfirmModal
+      :visible="isConfirmModal"
+      @close="closeModal"
+      confirm-text="Вы уверены, что хотите удалить вакансию?"
+      @onConfirm="confirmAction"
+      cancel-btn-text="Отмена"
+      confirmBtnText="Удалить"
+      title="Удаление вакансии"
+    />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue"
 import {useVacancyStore} from "@/app/store/modules/vacancy.js";
+import { TrashIcon, PencilIcon } from "@heroicons/vue/20/solid";
+import ConfirmModal from '@/shared/ConfirmModal.vue'
 
 const isLoading = ref(false)
+const vacancies = ref(false)
+const isConfirmModal = ref(false)
+const removedId = ref(null)
 
 //* store
-const {
-  fillVacancyList,
-  vacancyList
-} = useVacancyStore()
+const vacancyStore = useVacancyStore()
 
+const onRemove = (id) => {
+  console.log('id', id)
+  isConfirmModal.value = true
+  removedId.value = id
+}
 
+const closeModal = () => {
+  isConfirmModal.value = false
+}
 
-onMounted(async () => {
+const confirmAction = () => {
+  if(removedId.value) {
+    isLoading.value = true
+    vacancyStore.deleteVacancy(removedId.value)
+      .then(() => {
+        fillVacancies()
+          isConfirmModal.value = false
+      })
+  } else {
+    console.error('Id is not define')
+  }
+
+}
+
+const fillVacancies = async () => {
   isLoading.value = true
-  await fillVacancyList().then((res) => {
+  await vacancyStore.fillVacancyList().then((res) => {
     console.log('fillVacancyList', res)
+    vacancies.value = res
   })
     .finally(() => isLoading.value = false)
+}
 
+onMounted(() => {
+  fillVacancies()
 })
 </script>

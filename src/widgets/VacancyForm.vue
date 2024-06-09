@@ -146,21 +146,25 @@
     </div>
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
-      <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+      <button type="button" class="text-sm font-semibold leading-6 text-gray-900"
+              @click.prevent="back"
+      >
+        Отменить
+      </button>
       <button
         type="submit"
         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        @click.prevent="createVacancy"
+        @click.prevent="actionResolver"
       >
-        Создать
+        {{buttonName}}
       </button>
     </div>
   </form>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import BaseInput from '@/shared/BaseInput.vue'
 import BaseTextarea from '@/shared/BaseTextarea.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
@@ -172,9 +176,11 @@ import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { decamelize } from '@/shared/utils/keyConverter.js'
 import VacancyForm from '@/widgets/forms/VacancyForm.js'
 
+
 const vacancyStore = useVacancyStore()
 
 const route = useRoute()
+const router = useRouter()
 const {
   currencyList,
   cityList,
@@ -196,6 +202,7 @@ const employmentType = ref(null)
 const division = ref(null)
 const skill = ref([])
 const qualification = ref(null)
+const id = ref(null)
 const loading = ref(false)
 const errors = ref({
   name: '',
@@ -226,9 +233,23 @@ const title = computed(() => {
   return ''
 })
 
-const createVacancy = () => {
+const buttonName = computed(() => {
+  if (route.params?.operation === 'edit') {
+    return 'Сохранить'
+  }
+  if (route.params?.operation === 'create') {
+    return 'Создать'
+  }
+  return ''
+})
+
+const back = () => {
+  router.push('/vacancies')
+}
+
+const payloadBuilder = () => {
   const skillSet = skill?.value || []
-  const data = {
+  return {
     name: name.value,
     salaryFrom: salaryFrom.value,
     salaryTo: salaryTo.value,
@@ -243,17 +264,62 @@ const createVacancy = () => {
     qualificationId: qualification.value?.id,
     skillSet: skillSet.map((el) => el?.id).join(',')
   }
+}
+
+const actionResolver = () => {
+  const data = payloadBuilder()
   errors.value = VacancyForm.validate(data)
   console.log(errors.value)
+  const step = route.params?.operation
+  console.log('step', step)
   if(!errors.value && !loading.value) {
     const preparedData = decamelize(data)
     console.log(data)
     loading.value = true
-    vacancyStore.createVacancy(preparedData)
-      .then((res) => {
-        console.log(res)
-      })
-      .finally(() => loading.value = false)
+    if(step === 'create') {
+      vacancyStore.createVacancy(preparedData)
+        .then((res) => {
+          console.log(res)
+        })
+        .finally(() => loading.value = false)
+    }
+    console.log('id.value', id.value)
+    if(!id.value) {
+      console.error('Id is not define')
+    }
+    if(step === 'edit' && id?.value) {
+      vacancyStore.editVacancy(id?.value, data)
+        .then(() => {
+          router.push('/vacancies')
+        })
+        .finally(() => loading.value = false)
+    }
+
   }
 }
+
+const fillFields = (data) => {
+  id.value = data.id
+  name.value = data.name
+  description.value = data.description
+  salaryFrom.value = data.salaryFrom
+  salaryTo.value = data.salaryTo
+  currency.value = data.currency
+  isRemote.value = data.isRemote
+  todo.value = data.todo
+  city.value = data.city
+  team.value = data.team
+  employmentType.value = data.employmentType
+  division.value = data.division
+  skill.value = data.skill
+  qualification.value = data.qualification
+}
+
+onMounted(async() => {
+  if(route.params?.operation === 'edit' && route.params?.id) {
+    console.log('test')
+    await vacancyStore.getVacancy(route.params.id)
+      .then((res) => fillFields(res))
+  }
+})
 </script>
