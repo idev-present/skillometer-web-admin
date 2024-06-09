@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: skillometer-web-admin-ingress-route-websecure
+  namespace: skillometer
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`admin.skillometer.idev-present.com`)
+      kind: Rule
+      services:
+        - name: web-admin
+          port: 8080
+  tls: {}

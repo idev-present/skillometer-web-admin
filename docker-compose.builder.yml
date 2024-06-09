@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      args:
+        ENV: staging
+    container_name: skillometer-web-admin
+    image: ilyamachetto/skillometer-web-admin:0.2.9
+    platform: linux/amd64
+    env_file:
+      - .env.staging
+    ports:
+      - "80:8080"
