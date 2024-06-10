@@ -2,25 +2,36 @@
 import { Qalendar } from "qalendar";
 
 const events = [
-  // ...
   {
-    title: "Advanced algebra",
-    with: "Chandler Bing",
-    time: { start: "2024-05-16 12:05", end: "2022-05-16 13:35" },
-    color: "yellow",
-    isEditable: true,
-    id: "753944708f0f",
-    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!"
-  },
-  {
-    title: "Ralph on holiday",
-    with: "Rachel Greene",
-    time: { start: "2024-06-10", end: "2024-06-22" },
+    title: "Meeting with Dora",
+    with: "Albert Einstein",
+    time: { start: "2024-06-10 04:52", end: "2024-06-10 05:37" },
     color: "green",
     isEditable: true,
-    id: "5602b6f589fc"
-  }
-  // ...
+    id: "de471c78cb5c",
+    description:
+      "Think of me as Yoda. Only instead of being little and green, I wear suites and I'm awesome.",
+  },
+  {
+    title: "Advanced algebra",
+    with: "Pheobe Buffay",
+    time: { start: "2024-06-10 20:05", end: "2024-06-10 21:35" },
+    colorScheme: "sports",
+    isEditable: true,
+    id: "6d3c0980a5cf",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  },
+  {
+    title: "Break",
+    with: "Marshall Eriksen",
+    time: { start: "2024-06-10 22:10", end: "2024-06-10 22:55" },
+    colorScheme: "meetings",
+    isEditable: true,
+    id: "9f1b209982f1",
+    location: "Zoom",
+  },
+  // ... and more
 ]
 
 const config = {
@@ -47,6 +58,18 @@ const config = {
   // The silent flag can be added, to disable the development warnings. This will also bring a slight performance boost
   isSilent: true,
   showCurrentTime: true, // Display a line indicating the current time
+  style: {
+    colorSchemes: {
+      meetings: {
+        color: "#fff",
+        backgroundColor: "#131313",
+      },
+      sports: {
+        color: "#fff",
+        backgroundColor: "#ff4081",
+      },
+    },
+  },
 }
 
 </script>
