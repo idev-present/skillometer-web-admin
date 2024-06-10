@@ -10,7 +10,7 @@
         </button>
       </RouterLink>
     </div>
-    <div class="mt-8 flow-root">
+    <div v-if="vacancies?.length" class="mt-8 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -70,6 +70,12 @@
         </div>
       </div>
     </div>
+    <EmptyState
+      class="mt-16"
+      v-else
+      title="Вакансии не найдены"
+      description="Для добавления вакансии, нажите кнопку 'Новая вакансия'"
+    />
     <ConfirmModal
       :visible="isConfirmModal"
       @close="closeModal"
@@ -79,6 +85,7 @@
       confirmBtnText="Удалить"
       title="Удаление вакансии"
     />
+    <LoadingIndicator :visible="vacancyStore.isLoading"/>
   </div>
 </template>
 
@@ -87,6 +94,8 @@ import { onMounted, ref } from "vue"
 import {useVacancyStore} from "@/app/store/modules/vacancy.js";
 import { TrashIcon, PencilIcon, EyeIcon } from "@heroicons/vue/20/solid";
 import ConfirmModal from '@/shared/ConfirmModal.vue'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import EmptyState from '@/shared/EmptyState.vue'
 
 const isLoading = ref(false)
 const vacancies = ref(false)

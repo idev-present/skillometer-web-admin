@@ -62,7 +62,7 @@ export const useVacancyStore = defineStore({
         },
       getVacancy(payload) {
         return new Promise((resolve, reject) => {
-          console.log(payload)
+          this.isLoading = true
           ApiService
             .get(`/vacancy/${payload}`)
             .then((res) => {
@@ -76,6 +76,9 @@ export const useVacancyStore = defineStore({
               console.error(err)
               toast.error(err?.message || "Ошибка загрузки вакансии! Пожалуйста, попробуйте позже")
               reject()
+            })
+            .finally(() => {
+              this.isLoading = false
             })
         })
       },

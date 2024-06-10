@@ -72,12 +72,54 @@ const config = {
   },
 }
 
+
+const onDrag = (e) => {
+  console.log(e)
+}
+const onResize = (e) => {
+  console.log(e)
+}
+const onClick = (e) => {
+  console.log(e)
+}
+const onClickInterval = (e) => {
+  console.log(e)
+}
+const onUpdatePeriod = (e) => {
+  console.log(e)
+}
+const onUpdateMode = (e) => {
+  console.log(e)
+}
+const onEditEvent = (e) => {
+  console.log(e)
+}
+const onDeleteEvent = (e) => {
+  console.log(e)
+}
+const onDatetimeClick = (e) => {
+  console.log(e)
+}
+const onDateClick = (e) => {
+  console.log(e)
+}
+
 </script>
 
 <template>
 <Qalendar
   :events="events"
   :config="config"
+  @event-was-dragged="onDrag"
+  @event-was-resized="onResize"
+  @event-was-clicked="onClick"
+  @interval-was-clicked="onClickInterval"
+  @updated-period="onUpdatePeriod"
+  @updated-mode="onUpdateMode"
+  @edit-event="onEditEvent"
+  @delete-event="onDeleteEvent"
+  @datetime-was-clicked="onDatetimeClick"
+  @date-was-clicked="onDateClick"
 />
 </template>
 

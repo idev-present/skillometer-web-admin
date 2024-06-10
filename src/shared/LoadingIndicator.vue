@@ -1,9 +1,8 @@
 <template>
   <Transition name="modal">
     <div
-      v-if="isLoadingComputed"
+      v-if="visible"
       class="flex justify-center items-center fixed inset-0 modal__wrapper"
-      @mousedown.self="onMouseDown"
     >
       <div class="flex align-middle justify-center">
         <div role="status">
@@ -31,17 +30,6 @@
 </template>
 
 <script setup>
-import { useVacancyStore } from '@/app/store/modules/vacancy.js'
-import { computed } from 'vue'
-
-const vacancyStore = useVacancyStore()
-
-const isLoadingComputed = computed(() => {
-  const loadings = [
-    vacancyStore?.isLoading
-  ]
-  return loadings.some((e) => !!e)
-})
 
 const props = defineProps({
 
