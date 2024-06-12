@@ -25,7 +25,12 @@
               </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="(item, index) in applicants" :key="index">
+              <tr
+                class="cursor-pointer"
+                v-for="(item, index) in applicants"
+                :key="index"
+                @click="onRowClick(item.id)"
+              >
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ item.title }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.division?.name || '-' }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.qualification?.name || '-' }}</td>
@@ -72,10 +77,12 @@ import { EyeIcon } from "@heroicons/vue/20/solid";
 import ConfirmModal from '@/shared/ConfirmModal.vue'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import { useRouter } from 'vue-router'
 
 const isLoading = ref(false)
 const applicants = ref(false)
 const isConfirmModal = ref(false)
+const router = useRouter()
 
 //* store
 const applicantStore = useApplicantStore()
@@ -88,6 +95,14 @@ const fillApplicants = async () => {
     applicants.value = res
   })
     .finally(() => isLoading.value = false)
+}
+
+const onRowClick = (id) => {
+  if(!id) {
+    console.error('Id is not define')
+    return
+  }
+  router.push(`/applicants/view/${id}`)
 }
 
 onMounted(async () => {

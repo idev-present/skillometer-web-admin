@@ -145,38 +145,49 @@
             <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
             <select id="tabs" name="tabs"
                     class="mt-4 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-500">
-              <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
+              <option v-for="tab in dictionaryStore.replyStatusList" :key="tab.key" :selected="tab.current">{{ tab.value }}</option>
             </select>
           </div>
-          <div class="hidden sm:block">
+          <div class="sm:block">
             <div class="border-b border-gray-200">
-              <nav class="-mb-px mt-2 flex space-x-8" aria-label="Tabs">
-                <RouterLink
-                  v-for="tab in tabs"
-                  :key="tab.name"
-                  :to="tab.href"
-                  :class="[tab.href === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium']">
-                  {{ tab.name }}
-                  <span v-if="tab.count"
-                        :class="[tab.href === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count
-                    }}</span>
-                </RouterLink>
-              </nav>
+              <swiper-container
+                :slides-per-view="5"
+              >
+                <swiper-slide
+                  v-for="tab in dictionaryStore.replyStatusList"
+                  :key="tab.key"
+                >
+                  <nav class="-mb-px mt-2 flex justify-center space-x-8 w-20" aria-label="Tabs">
+                    <div
+                      :class="[tab.href === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium']"
+                      @click="onTabClick(tab)"
+                    >
+                      {{ tab.value }}
+                      <span v-if="tab.count"
+                            :class="[tab.href === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count
+                        }}
+                      </span>
+                    </div>
+                  </nav>
+                </swiper-slide>
+
+              </swiper-container>
+
+
             </div>
           </div>
         </div>
 
         <!-- Stacked list -->
         <ul role="list" class="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-          <li v-for="candidate in candidates" :key="candidate.email">
+          <li v-for="reply in replies" :key="reply.id">
             <ReplyListItem
-              :id="candidate.id"
-              :imageUrl="candidate.imageUrl"
-              :name="candidate.name"
-              :email="candidate.email"
-              :status="candidate.status"
-              :appliedDatetime="candidate.appliedDatetime"
-              :applied="candidate.applied"
+              :id="reply.id"
+              :imageUrl="reply.applicantAvatar"
+              :name="reply.applicantFullname"
+              :email="reply.applicantEmail"
+              :status="reply.status"
+              :appliedDatetime="reply.updatedAt"
             />
           </li>
         </ul>
@@ -219,34 +230,18 @@ import { useRoute } from 'vue-router'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
+import { register } from 'swiper/element/bundle';
 
-const tabs = [
-  { name: 'Applied', href: 'applied', count: '2', current: false },
-  { name: 'Phone Screening', href: 'phone-screening', count: '4', current: false },
-  { name: 'Interview', href: 'interview', count: '6', current: true },
-  { name: 'Offer', href: 'offer', current: false },
-  { name: 'Disqualified', href: 'disqualified', current: false }
-]
-
+register();
 const route = useRoute()
 
 const vacancyStore = useVacancyStore()
 
 const replyStore = useReplyStore()
 
-const candidates = [
-  {
-    id: '42342342',
-    name: 'Emily Selman',
-    email: 'emily.selman@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    applied: 'January 7, 2020',
-    appliedDatetime: '2020-07-01T15:34:56',
-    status: 'Completed phone screening'
-  }
-  // More candidates...
-]
+const dictionaryStore = useDictionaryStore()
+
 const publishingOptions = [
   { name: 'Опубликована', description: 'This job posting can be viewed by anyone who has the link.', current: true },
   { name: 'Не опубликована', description: 'This job posting will no longer be publicly accessible.', current: false }
@@ -258,6 +253,10 @@ const replies = ref(null)
 const currentTab = computed(() => {
   return route.params.status
 })
+
+const onTabClick = () => {
+  console.log(route.params.status)
+}
 
 onMounted(() => {
   const id = route.params?.id

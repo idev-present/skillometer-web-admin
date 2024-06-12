@@ -12,3 +12,18 @@ export const getLocalDate = (date) => {
     return "";
   }
 };
+
+export const getLocalDateTime = (date) => {
+  if (date && isDateValid(date)) {
+    return new Date(date).toLocaleString("ru-RU", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+    });
+  } else {
+    console.error("Date is not valid");
+    return "";
+  }
+};

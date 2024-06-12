@@ -25,7 +25,7 @@ export const useReplyStore = defineStore({
           .get("/reply/", payload)
           .then((res) => {
             console.log(res)
-            const data = res ? camelize(res) : null
+            const data = res ? camelize(res) : []
             this.replyList = data
             resolve(data)
           })

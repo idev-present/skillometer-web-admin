@@ -14,7 +14,8 @@ export const useDictionaryStore = defineStore({
       divisionList: [],
       qualificationList: [],
       skillList: [],
-      searchStatusList: []
+      searchStatusList: [],
+      replyStatusList: [],
     }
   },
   actions: {
@@ -151,6 +152,21 @@ export const useDictionaryStore = defineStore({
           .catch((err) => {
             console.error(err)
             toast.error(err?.message || "Ошибка загрузки списка статусов! Пожалуйста, попробуйте позже")
+            reject()
+          })
+      })
+    },
+    fillReplyStatusList() {
+      return new Promise((resolve, reject) => {
+        ApiService
+          .get("/dict/reply_status")
+          .then((res) => {
+            this.replyStatusList = res || []
+            resolve()
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки списка статусов отклика! Пожалуйста, попробуйте позже")
             reject()
           })
       })

@@ -271,6 +271,7 @@ onMounted(async () => {
     dictionaryStore.fillQualificationList(),
     dictionaryStore.fillSkillList(),
     dictionaryStore.fillSearchStatusList(),
+    dictionaryStore.fillReplyStatusList(),
   ]
   await Promise.all(arr)
 })
