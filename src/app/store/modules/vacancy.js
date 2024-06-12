@@ -24,10 +24,10 @@ export const useVacancyStore = defineStore({
                 ApiService
                     .get("/vacancy/", payload)
                     .then((res) => {
-                        const data = res || []
-                      console.log( camelize(data))
-                      this.vacancyList = camelize(data)
-                        resolve(camelize(data))
+                      const data = res?.length ? camelize(res) : []
+                      const preparedData = data.map((item) => vacancyBuilder(item))
+                      this.vacancyList = preparedData
+                        resolve(preparedData)
                     })
                     .catch((err) => {
                         console.error(err)

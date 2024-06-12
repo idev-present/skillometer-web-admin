@@ -2,6 +2,7 @@ import { defineStore } from "pinia"
 import { useToast } from "vue-toastification"
 import ApiService from "@/shared/services/api.service.js"
 import Cookies from "js-cookie";
+import { camelize } from '@/shared/utils/keyConverter.js'
 
 const toast = useToast()
 export const useUserStore = defineStore({
@@ -21,8 +22,9 @@ export const useUserStore = defineStore({
                 ApiService
                     .get(`/user/profile`, null)
                     .then((res) => {
-                        resolve(res || null)
-                        this.user = res || null
+                        const data = res ? camelize(res) : res
+                        resolve(data || null)
+                        this.user = data || null
                         this.isAuth = true
                     })
                     .catch((err) => {
@@ -41,7 +43,8 @@ export const useUserStore = defineStore({
                 ApiService
                     .put(`/user/profile`, payload)
                     .then((res) => {
-                        resolve(res || null)
+                        const data = res ? camelize(res) : res
+                        resolve(data || null)
                         toast.success("Успешно")
                     })
                     .catch((err) => {

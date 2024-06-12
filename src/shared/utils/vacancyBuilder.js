@@ -1,6 +1,7 @@
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { salaryToString } from '@/shared/utils/priceMask.js'
 import { getLocalDate } from '@/shared/utils/getLocalDate.js'
+import { habrLink, hhLink } from '@/shared/utils/linkHelper.js'
 
 const {
   cityList,
@@ -27,6 +28,8 @@ export const vacancyBuilder = (vac) => {
     skill: arrSkill.map((id) => skillList.find((item) => item?.id === id)),
     qualification: qualificationList.find((item) => item?.id === vac?.qualificationId),
     salaryString: salaryToString(vac?.salaryFrom, vac?.salaryTo),
-    localPublishedDate: getLocalDate(vac?.publishedAt)
+    localPublishedDate: getLocalDate(vac?.publishedAt),
+    habrUrl: habrLink(vac?.habrId),
+    hhUrl: hhLink(vac?.hhId),
   }
 }

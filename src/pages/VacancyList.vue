@@ -21,7 +21,6 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Зарплата</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Тип занятости</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Квалификация</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Навыки</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Дата</th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Actions</span>
@@ -31,11 +30,10 @@
               <tbody class="divide-y divide-gray-200 bg-white">
               <tr v-for="(item, index) in vacancies" :key="index">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ item.name }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.salaryFrom }} - {{item?.salaryTo}}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.email }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.role }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.role }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.role }}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.salaryFrom }} - {{item?.salaryTo}} {{item?.currency?.value || ''}}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.employmentType?.name || "-" }}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item?.qualification?.name || '-' }}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ getLocalDate(item?.publishedAt) }}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                   <div class="flex">
                     <RouterLink
@@ -96,6 +94,7 @@ import { TrashIcon, PencilIcon, EyeIcon } from "@heroicons/vue/20/solid";
 import ConfirmModal from '@/shared/ConfirmModal.vue'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import EmptyState from '@/shared/EmptyState.vue'
+import { getLocalDate } from '../shared/utils/getLocalDate.js'
 
 const isLoading = ref(false)
 const vacancies = ref(false)

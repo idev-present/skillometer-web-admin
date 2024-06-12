@@ -41,12 +41,28 @@
             </RouterLink>
           </span>
 
-          <span class="ml-3 hidden sm:block">
-            <button type="button"
-                    class="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <span v-if="data?.habrUrl" class="cursor-pointer ml-3 hidden sm:block">
+            <a
+              type="button"
+              class="pointer inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              :href="data?.habrUrl"
+              target="_blank"
+              rel="external"
+            >
               <LinkIcon class="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-              View
-            </button>
+              Хабр
+            </a>
+          </span>
+          <span v-if="data?.hhUrl" class="cursor-pointer ml-3 hidden sm:block">
+            <a type="button"
+               class="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+               :href="data?.hhUrl"
+               target="_blank"
+               rel="external"
+            >
+              <LinkIcon class="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+              HH
+            </a>
           </span>
 
           <Listbox as="div" v-model="selected" class="sm:ml-3">
@@ -193,7 +209,7 @@ import {
   CurrencyDollarIcon,
   LinkIcon,
   MapPinIcon,
-  PencilIcon
+  PencilIcon,
 } from '@heroicons/vue/20/solid'
 import ReplyListItem from '@/shared/ReplyListItem.vue'
 import Pagination from '@/shared/Pagination.vue'

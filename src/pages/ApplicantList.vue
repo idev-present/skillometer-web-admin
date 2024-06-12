@@ -88,7 +88,7 @@ const fillApplicants = async () => {
     .finally(() => isLoading.value = false)
 }
 
-onMounted(() => {
-  fillApplicants()
+onMounted(async () => {
+  await fillApplicants()
 })
 </script>

@@ -30,7 +30,7 @@
                   <div>
                     <h2 class="text-lg font-medium leading-6 text-gray-900">Личная информация</h2>
                     <p class="mt-1 text-sm text-gray-500">
-                      Эта информация будет отображаться только работодателям
+                      Эта информация будет отображаться в вакансиях
                     </p>
                   </div>
                   <!--Аватар-->
@@ -241,11 +241,7 @@ const directoriesStore = useDictionaryStore()
 
 const subNavigation = [
   { name: 'Профиль', href: '/profile', icon: UserCircleIcon },
-  { name: 'Специализация', href: '/specialization', icon: CogIcon },
-  { name: 'Опыт работы', href: '/experience', icon: BriefcaseIcon },
-  { name: 'Образование', href: '/education', icon: AcademicCapIcon },
   { name: 'Контакты', href: '/contacts', icon: UserPlusIcon },
-  { name: 'Резюме', href: '/resume', icon: WrenchScrewdriverIcon },
 ]
 const user = ref({
   firstName: '',
