@@ -94,11 +94,11 @@ const applicantId = computed(() => {
 })
 
 onMounted(() => {
-  if (!applicantId.value) console.error('id is not define')
-  applicantStore.getApplicant(applicantId.value)
-    .then((res) => {
-      applicant.value = res
-    })
+  // if (!applicantId.value) console.error('id is not define')
+  // applicantStore.getApplicant(applicantId.value)
+  //   .then((res) => {
+  //     applicant.value = res
+  //   })
 })
 
 </script>
