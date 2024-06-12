@@ -170,6 +170,7 @@
         <ul role="list" class="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
           <li v-for="candidate in candidates" :key="candidate.email">
             <ReplyListItem
+              :id="candidate.id"
               :imageUrl="candidate.imageUrl"
               :name="candidate.name"
               :email="candidate.email"
@@ -184,6 +185,7 @@
         <Pagination />
       </div>
     </main>
+    <LoadingIndicator :visible="vacancyStore.isLoading"/>
   </div>
 </template>
 
@@ -216,6 +218,7 @@ import Pagination from '@/shared/Pagination.vue'
 import { useRoute } from 'vue-router'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 
 const tabs = [
   { name: 'Applied', href: 'applied', count: '2', current: false },
@@ -233,6 +236,7 @@ const replyStore = useReplyStore()
 
 const candidates = [
   {
+    id: '42342342',
     name: 'Emily Selman',
     email: 'emily.selman@example.com',
     imageUrl:

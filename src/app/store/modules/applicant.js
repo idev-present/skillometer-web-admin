@@ -42,6 +42,7 @@ export const useApplicantStore = defineStore({
     },
     getApplicant(payload) {
       return new Promise((resolve, reject) => {
+        this.isLoading = true
         console.log(payload)
         ApiService
           .get(`/applicant/${payload}`)
@@ -55,6 +56,9 @@ export const useApplicantStore = defineStore({
             console.error(err)
             toast.error(err?.message || "Ошибка загрузки данных кандидата! Пожалуйста, попробуйте позже")
             reject()
+          })
+          .finally(() => {
+            this.isLoading = false
           })
       })
     },

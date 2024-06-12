@@ -20,7 +20,7 @@
               </nav>
             </aside>
 
-            <div v-if="!isLoading" class="divide-y divide-gray-200 lg:col-span-9">
+            <div v-if="!userStore.isLoading" class="divide-y divide-gray-200 lg:col-span-9">
                   <h1 class="px-4 py-4 sm:p-4 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 border-b pb-3">
                     Профиль
                   </h1>
@@ -237,7 +237,7 @@ const isLoading = ref(false)
 
 //* store
 const userStore = useUserStore()
-const directoriesStore = useDictionaryStore()
+const dictionaryStore = useDictionaryStore()
 
 const subNavigation = [
   { name: 'Профиль', href: '/profile', icon: UserCircleIcon },
@@ -261,7 +261,7 @@ const errors = ref({
 })
 
 const cityList = computed(() => {
-  return directoriesStore?.cityList || []
+  return di?.cityList || []
 })
 
 const saveForm = async () => {
@@ -286,22 +286,19 @@ const saveForm = async () => {
 }
 
 onMounted(async () => {
-  isLoading.value = true
-  await Promise.all([
-    directoriesStore.fillCityList(),
-  ]).finally(() => {
-    user.value = {
-      ...userStore.user,
-      firstName: userStore?.user?.first_name || '',
-      lastName: userStore?.user?.last_name || '',
-      date: userStore?.user?.birthday || '',
-      city: cityList?.value?.find((item) => item.id === (userStore?.user?.city || '')) || null,
-      description: userStore?.user?.bio || '',
-      gender: userStore?.user?.gender || ''
-    }
-    userStore.fillUser()
-    isLoading.value = false
-  });
+  userStore.fillUser()
+    .then((res) => {
+      console.log(res)
+      user.value = {
+        ...res.user,
+        firstName: res?.firstName || '',
+        lastName: res?.lastName || '',
+        date: res?.birthday || '',
+        city: dictionaryStore.cityList.find((item) => item.id === (userStore?.user?.city || '')) || null,
+        description: res?.bio || '',
+        gender: res?.gender || ''
+      }
+    })
 })
 </script>
 

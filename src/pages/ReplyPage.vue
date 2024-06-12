@@ -42,13 +42,17 @@
       </div>
 
       <div
-        class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-1">
+        class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2 lg:col-start-1">
+          <!-- Description list-->
+
         <ApplicantView
           :applicant="applicant"
         />
+        <Notes/>
         </div>
 
+        <TimelineForm/>
       </div>
     </main>
   </div>
@@ -60,7 +64,24 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
+import {
+  ArrowLongLeftIcon,
+  CheckIcon,
+  HandThumbUpIcon,
+  HomeIcon,
+  MagnifyingGlassIcon,
+  PaperClipIcon,
+  QuestionMarkCircleIcon,
+  UserIcon
+} from '@heroicons/vue/20/solid'
+import TimelineForm from '@/widgets/TimelineForm.vue'
 import ApplicantView from '@/pages/ApplicantView.vue'
+import Notes from '@/widgets/Notes.vue'
+
+
+
+
+
 
 const route = useRoute()
 

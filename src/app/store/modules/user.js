@@ -14,11 +14,13 @@ export const useUserStore = defineStore({
             skillometer_access_token: '',
             skillometer_refresh_token: '',
             expires_in: '',
+            isLoading: true,
         }
     },
     actions: {
         fillUser(payload = null) {
             return new Promise((resolve, reject) => {
+                this.isLoading = true
                 ApiService
                     .get(`/user/profile`, null)
                     .then((res) => {
@@ -36,10 +38,14 @@ export const useUserStore = defineStore({
                         }
                         reject()
                     })
+                  .finally(() => {
+                      this.isLoading = false
+                  })
             })
         },
         updateUser(payload = null) {
             return new Promise((resolve, reject) => {
+                this.isLoading = true
                 ApiService
                     .put(`/user/profile`, payload)
                     .then((res) => {
@@ -56,6 +62,9 @@ export const useUserStore = defineStore({
                         }
                         reject()
                     })
+                  .finally(() => {
+                      this.isLoading = false
+                  })
             })
         },
         logout(payload = null) {

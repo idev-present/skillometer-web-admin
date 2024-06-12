@@ -62,6 +62,7 @@
       confirmBtnText="Удалить"
       title="Удаление вакансии"
     />
+    <LoadingIndicator :visible="applicantStore.isLoading"/>
   </div>
 </template>
 
@@ -70,6 +71,7 @@ import { onMounted, ref } from "vue"
 import { EyeIcon } from "@heroicons/vue/20/solid";
 import ConfirmModal from '@/shared/ConfirmModal.vue'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 
 const isLoading = ref(false)
 const applicants = ref(false)

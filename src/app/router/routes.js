@@ -40,6 +40,11 @@ const routes = [
     component: () => import('@/pages/ApplicantPage.vue')
   },
   {
+    path: '/reply/view/:id',
+    name: 'Reply',
+    component: () => import('@/pages/ReplyPage.vue')
+  },
+  {
     name: 'AuthCallback',
     path: import.meta.env.VITE_IAM_REDIRECT_URI,
     component: () => import('@/pages/AuthCallback.vue')

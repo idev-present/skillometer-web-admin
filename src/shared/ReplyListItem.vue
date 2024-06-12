@@ -28,6 +28,10 @@ const props = defineProps({
     type: String,
     default: () => ""
   },
+  id: {
+    type: String,
+    default: () => ""
+  },
 })
 </script>
 
@@ -62,7 +66,9 @@ const props = defineProps({
         </div>
       </div>
       <div>
-        <ChevronRightIcon class="h-5 w-5 text-gray-400 group-hover:text-gray-700" aria-hidden="true" />
+        <RouterLink :to="`/reply/view/${id}`">
+          <ChevronRightIcon class="h-5 w-5 text-gray-400 group-hover:text-gray-700" aria-hidden="true" />
+        </RouterLink>
       </div>
     </div>
   </a>
