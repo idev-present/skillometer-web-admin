@@ -266,16 +266,6 @@ const navigation = [
   { name: 'Applicants', href: '#' },
   { name: 'Company', href: '#' }
 ]
-const breadcrumbs = [
-  { name: 'Jobs', href: '#', current: false },
-  { name: 'Front End Developer', href: '#', current: false },
-  { name: 'Applicants', href: '#', current: true }
-]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' }
-]
 const attachments = [
   { name: 'resume_front_end_developer.pdf', href: '#' },
   { name: 'coverletter_front_end_developer.pdf', href: '#' }

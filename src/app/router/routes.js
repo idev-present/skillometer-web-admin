@@ -5,17 +5,14 @@ const routes = [
     component: () => import('@/pages/VacancyList.vue')
   },
   {
-    name: 'LoginPage',
-    path: '/login',
-    meta: {
-      requiredAuth: false
-    },
-    component: () => import('@/pages/LoginPage.vue')
-  },
-  {
     path: '/schedule',
     name: 'SchedulePage',
     component: () => import('@/pages/SchedulePage.vue')
+  },
+  {
+    path: '/profile',
+    name: 'ProfilePage',
+    component: () => import('@/pages/ProfilePage.vue')
   },
   {
     path: '/vacancies/view/:id/:status?',
@@ -36,6 +33,11 @@ const routes = [
     path: '/applicants/view/:id',
     name: 'Applicant',
     component: () => import('@/pages/ApplicantPage.vue')
+  },
+  {
+    name: 'AuthCallback',
+    path: import.meta.env.VITE_IAM_REDIRECT_URI,
+    component: () => import('@/pages/AuthCallback.vue')
   },
   // System
   {

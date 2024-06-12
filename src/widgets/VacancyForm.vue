@@ -174,7 +174,7 @@ import BaseCombobox from '@/shared/BaseCombobox.vue'
 import BaseContentEditor from '@/shared/BaseContentEditor.vue'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { decamelize } from '@/shared/utils/keyConverter.js'
-import VacancyForm from '@/widgets/forms/VacancyForm.js'
+import VacancyForm from '@/app/forms/VacancyForm.js'
 
 
 const vacancyStore = useVacancyStore()
