@@ -37,7 +37,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <a href="#" class="group block">
+  <RouterLink
+    :to="`/reply/view/${id}`"
+    class="group block"
+  >
     <div class="flex items-center px-4 py-5 sm:px-0 sm:py-6">
       <div class="flex min-w-0 flex-1 items-center">
         <div class="flex-shrink-0">
@@ -67,12 +70,10 @@ const props = defineProps({
         </div>
       </div>
       <div>
-        <RouterLink :to="`/reply/view/${id}`">
           <ChevronRightIcon class="h-5 w-5 text-gray-400 group-hover:text-gray-700" aria-hidden="true" />
-        </RouterLink>
       </div>
     </div>
-  </a>
+  </RouterLink>
 </template>
 
 <style scoped>

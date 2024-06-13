@@ -157,14 +157,14 @@
                   v-for="tab in dictionaryStore.replyStatusList"
                   :key="tab.key"
                 >
-                  <nav class="-mb-px mt-2 flex justify-center space-x-8 w-20" aria-label="Tabs">
+                  <nav class="-mb-px mt-2 flex justify-center space-x-8 w-20 cursor-pointer" aria-label="Tabs">
                     <div
-                      :class="[tab.href === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium']"
+                      :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap px-1 py-4 text-sm font-medium']"
                       @click="onTabClick(tab)"
                     >
                       {{ tab.value }}
                       <span v-if="tab.count"
-                            :class="[tab.href === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count
+                            :class="[tab.key === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count
                         }}
                       </span>
                     </div>
@@ -226,7 +226,7 @@ import {
 } from '@heroicons/vue/20/solid'
 import ReplyListItem from '@/shared/ReplyListItem.vue'
 import Pagination from '@/shared/Pagination.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
@@ -235,6 +235,8 @@ import { register } from 'swiper/element/bundle';
 
 register();
 const route = useRoute()
+
+const router = useRouter()
 
 const vacancyStore = useVacancyStore()
 
@@ -251,14 +253,19 @@ const data = ref(null)
 const replies = ref(null)
 
 const currentTab = computed(() => {
-  return route.params.status
+  return route.query?.tab
 })
 
-const onTabClick = () => {
-  console.log(route.params.status)
+const onTabClick = (tab) => {
+  router.push({ query: { tab: tab.key } })
 }
 
 onMounted(() => {
+  //TODO: Исправить на первую доступную вкладку из запроса
+  if(!currentTab.value) {
+    router.push({ query: { tab: "NEW" } })
+
+  }
   const id = route.params?.id
   if(!id) {
     throw Error('Id is not define')

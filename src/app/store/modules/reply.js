@@ -56,5 +56,21 @@ export const useReplyStore = defineStore({
           })
       })
     },
+    getReplyNextStatusFlow(id) {
+      return new Promise((resolve, reject) => {
+        console.log(id)
+        ApiService
+          .get(`/reply/${id}/status`)
+          .then((res) => {
+            const data = res ? camelize(res) : []
+            resolve(data)
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки списка доступных статусов ! Пожалуйста, попробуйте позже")
+            reject()
+          })
+      })
+    }
   },
 })

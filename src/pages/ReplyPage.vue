@@ -34,10 +34,9 @@
                   class="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             Disqualify
           </button>
-          <button type="button"
-                  class="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            Advance to offer
-          </button>
+          <StatusResolver
+            :options="nextStatuses"
+          />
         </div>
       </div>
 
@@ -77,6 +76,8 @@ import {
 import TimelineForm from '@/widgets/TimelineForm.vue'
 import ApplicantView from '@/pages/ApplicantView.vue'
 import Notes from '@/widgets/Notes.vue'
+import StatusResolver from '@/widgets/StatusResolver.vue'
+import { useReplyStore } from '@/app/store/modules/reply.js'
 
 
 
@@ -85,15 +86,31 @@ import Notes from '@/widgets/Notes.vue'
 
 const route = useRoute()
 
+const replyStore = useReplyStore()
+
 const applicantStore = useApplicantStore()
 
 const applicant = ref(null)
 
-const applicantId = computed(() => {
-  return route.params?.id
+const nextStatuses = ref([])
+
+const replyId = computed(() => {
+  return route?.params?.id
 })
 
-onMounted(() => {
+const getNextStatus = () => {
+  if(!replyId.value) {
+    console.error('reply id is not define')
+    return null
+  }
+  replyStore.getReplyNextStatusFlow(replyId.value)
+    .then((res) => {
+      nextStatuses.value = res
+    })
+}
+
+onMounted(async() => {
+  await getNextStatus()
   // if (!applicantId.value) console.error('id is not define')
   // applicantStore.getApplicant(applicantId.value)
   //   .then((res) => {
