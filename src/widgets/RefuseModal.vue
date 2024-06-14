@@ -30,6 +30,7 @@
           <BaseTextarea
             class="w-full"
             label="Введите причину отказа"
+            v-model="refuseText"
           />
         </div>
         <div class="modal-footer px-8 pt-4">
@@ -46,7 +47,7 @@
               class="ml-2"
               :label="confirmBtnText"
               rounded
-              :disabled="isConfirmDisabled"
+              :disabled="!refuseText.length"
               @onClick="onConfirm"
               @onKeyUpEnter="onConfirm"
             />
@@ -59,7 +60,7 @@
 
 <script setup>
 // icons
-import { onMounted } from "vue";
+import { onMounted, ref } from 'vue'
 import BaseButton from '@/shared/BaseButton.vue'
 import { XMarkIcon } from "@heroicons/vue/20/solid";
 import BaseTextarea from '@/shared/BaseTextarea.vue'
@@ -90,6 +91,8 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "onConfirm"]);
 
+const refuseText = ref('')
+
 //* hooks
 onMounted(() => {
   document.body.addEventListener("keyup", (e) => {
@@ -110,7 +113,7 @@ const close = () => {
   emit("close", false);
 };
 const onConfirm = () => {
-  emit("onConfirm");
+  emit("onConfirm", refuseText.value);
 };
 </script>
 

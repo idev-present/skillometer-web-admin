@@ -35,7 +35,11 @@
             Disqualify
           </button>
           <StatusResolver
-            :options="nextStatuses"
+            :id="replyId"
+            :options="replyStore.availableStatuses || []"
+            :currentStatus="replyStore.currentReply.status"
+            :model-value="replyStore.currentReply.statusEntity"
+            @update:model-value="onChangeStatus"
           />
         </div>
       </div>
@@ -48,7 +52,11 @@
         <ApplicantView
           :applicant="applicant"
         />
-        <Notes/>
+        <Notes
+          :comments="comments"
+          :reply-id="replyId"
+
+        />
         </div>
 
         <TimelineForm/>
@@ -63,16 +71,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
-import {
-  ArrowLongLeftIcon,
-  CheckIcon,
-  HandThumbUpIcon,
-  HomeIcon,
-  MagnifyingGlassIcon,
-  PaperClipIcon,
-  QuestionMarkCircleIcon,
-  UserIcon
-} from '@heroicons/vue/20/solid'
 import TimelineForm from '@/widgets/TimelineForm.vue'
 import ApplicantView from '@/pages/ApplicantView.vue'
 import Notes from '@/widgets/Notes.vue'
@@ -92,7 +90,7 @@ const applicantStore = useApplicantStore()
 
 const applicant = ref(null)
 
-const nextStatuses = ref([])
+const comments = ref([])
 
 const replyId = computed(() => {
   return route?.params?.id
@@ -105,17 +103,38 @@ const getNextStatus = () => {
   }
   replyStore.getReplyNextStatusFlow(replyId.value)
     .then((res) => {
-      nextStatuses.value = res
     })
+}
+
+const onChangeStatus = (e) => {
+console.log(e)
 }
 
 onMounted(async() => {
   await getNextStatus()
-  // if (!applicantId.value) console.error('id is not define')
-  // applicantStore.getApplicant(applicantId.value)
-  //   .then((res) => {
-  //     applicant.value = res
-  //   })
+  if(!replyId.value) {
+    console.error('reply id is not define')
+    return null
+  }
+  replyStore.getReply(replyId.value)
+    .then((res) => {
+      console.log('res', res)
+      if(res?.applicantId) {
+        applicantStore.getApplicant(res.applicantId)
+          .then((res) => {
+            console.log('res', res)
+            applicant.value = res
+          })
+      } else {
+        console.error('applicant id is not define')
+      }
+
+    })
+
+  replyStore.getReplyComments(replyId.value)
+    .then((res) => {
+      comments.value = res
+    })
 })
 
 </script>

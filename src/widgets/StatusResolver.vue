@@ -1,14 +1,15 @@
 <template>
-  <Listbox as="div"
-           :value="value"
-           on-update:model-value=""
+  <Listbox
+    as="div"
+    :modelValue="modelValue"
+    @update:modelValue="value => onUpdate(value)"
   >
     <ListboxLabel class="sr-only">Change published status</ListboxLabel>
     <div class="relative">
       <div class="inline-flex divide-x divide-indigo-700 rounded-md shadow-sm">
         <div class="inline-flex items-center gap-x-1.5 rounded-l-md bg-indigo-600 px-3 py-2 text-white shadow-sm">
           <CheckIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
-          <p class="text-sm font-semibold">{{ value.value }}</p>
+          <p class="text-sm font-semibold">{{ modelValue?.status?.value }}</p>
         </div>
         <ListboxButton class="inline-flex items-center rounded-l-none rounded-r-md bg-indigo-600 p-2 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:ring-offset-gray-50">
           <span class="sr-only">Change published status</span>
@@ -27,7 +28,7 @@
                     <CheckIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </div>
-                <p :class="[active ? 'text-indigo-200' : 'text-gray-500', 'mt-2']">Описание</p>
+                <p :class="[active ? 'text-indigo-200' : 'text-gray-500', 'mt-2']">Переход к следующему статусу</p>
               </div>
             </li>
           </ListboxOption>
@@ -39,33 +40,82 @@
       title="Отказ"
       cancel-btn-text="Отмена"
       confirm-btn-text="Отправить"
+      @on-confirm="updateWithReason"
+      @close="closeModal"
     />
   </Listbox>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import RefuseModal from '@/widgets/RefuseModal.vue'
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
+import { useReplyStore } from '@/app/store/modules/reply.js'
 
-const publishingOptions = [
-  { title: 'Published', description: 'This job posting can be viewed by anyone who has the link.', current: true },
-  { title: 'Draft', description: 'This job posting will no longer be publicly accessible.', current: false },
-]
+const dictionary = useDictionaryStore()
+
+const replyStore = useReplyStore()
 
 const showRefuseModal = ref(false)
+const tempStatus = ref(null)
+const emit = defineEmits(['update:modelValue', 'onChange'])
+
+
+
 
 const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({})
+  },
   options: {
     type: Array,
     default: () => []
   },
-  value: {
-    type: Object,
-    default: () => ({})
-  }
+  id: {
+    type: String,
+    default: ''
+  },
 })
 
-const selected = ref(publishingOptions[0])
+const updateWithReason = (reason) => {
+  console.log(reason)
+  const payload = {
+    status: tempStatus.value,
+    reason: reason
+  }
+  sendStatus(payload)
+}
+
+const onUpdate = (e) => {
+  console.log(e.status.key)
+  if(e?.isRequiredReason && e?.status?.key) {
+    showRefuseModal.value = true
+    tempStatus.value = e.status.key
+  } else {
+    const payload = {
+      status: e?.status?.key,
+      reason: ''
+    }
+    sendStatus(payload)
+  }
+}
+
+const closeModal = () => {
+  showRefuseModal.value = false
+}
+
+const sendStatus = (payload) => {
+  replyStore.setReplyStatus(props.id, payload)
+    .then(() => {
+        replyStore.getReply(props.id)
+          .then(() => {
+            replyStore.getReplyNextStatusFlow(props.id)
+          })
+    })
+}
+
+
 </script>
