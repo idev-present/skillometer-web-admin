@@ -28,7 +28,7 @@
                     <CheckIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </div>
-                <p :class="[active ? 'text-indigo-200' : 'text-gray-500', 'mt-2']">Переход к следующему статусу</p>
+                <p :class="[active ? 'text-indigo-200' : 'text-gray-500', 'mt-2']">{{option?.description || ''}}</p>
               </div>
             </li>
           </ListboxOption>
@@ -47,20 +47,17 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import RefuseModal from '@/widgets/RefuseModal.vue'
-import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 
-const dictionary = useDictionaryStore()
 
 const replyStore = useReplyStore()
 
 const showRefuseModal = ref(false)
 const tempStatus = ref(null)
-const emit = defineEmits(['update:modelValue', 'onChange'])
 
 
 

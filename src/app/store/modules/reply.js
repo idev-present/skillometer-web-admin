@@ -4,6 +4,7 @@ import ApiService from '@/shared/services/api.service.js'
 import { camelize } from '@/shared/utils/keyConverter.js'
 import { applicantBuilder } from '@/shared/utils/applicationBuilder.js'
 import { replyBuilder } from '@/shared/utils/replyBuilder.js'
+import { statusDescriptions } from '@/shared/constants.js'
 
 const toast = useToast()
 
@@ -46,6 +47,7 @@ export const useReplyStore = defineStore({
     getReply(payload) {
       return new Promise((resolve, reject) => {
         console.log(payload)
+        this.isLoading = true
         ApiService
           .get(`/reply/${payload}`)
           .then((res) => {
@@ -59,16 +61,23 @@ export const useReplyStore = defineStore({
             toast.error(err?.message || "Ошибка загрузки отклика! Пожалуйста, попробуйте позже")
             reject()
           })
+          .finally(() => {
+            this.isLoading = false
+          })
       })
     },
     getReplyNextStatusFlow(id) {
       return new Promise((resolve, reject) => {
         console.log(id)
+        this.isLoading = true
         ApiService
           .get(`/reply/${id}/status`)
           .then((res) => {
             const data = res ? camelize(res) : []
-            this.availableStatuses = data
+            this.availableStatuses = data.map((item) => ({
+              ...item,
+              description: statusDescriptions[item?.status?.key]
+            }))
             resolve(data)
           })
           .catch((err) => {
@@ -76,11 +85,15 @@ export const useReplyStore = defineStore({
             toast.error(err?.message || "Ошибка загрузки списка доступных статусов ! Пожалуйста, попробуйте позже")
             reject()
           })
+          .finally(() => {
+            this.isLoading = false
+          })
       })
     },
     getReplyComments(id) {
       return new Promise((resolve, reject) => {
         console.log(id)
+        this.isLoading = true
         ApiService
           .get(`/reply/${id}/comments`)
           .then((res) => {
@@ -92,11 +105,15 @@ export const useReplyStore = defineStore({
             toast.error(err?.message || "Ошибка загрузки списка комментариев! Пожалуйста, попробуйте позже")
             reject()
           })
+          .finally(() => {
+            this.isLoading = false
+          })
       })
     },
     sendReplyComment(id, payload) {
       return new Promise((resolve, reject) => {
         console.log(id)
+        this.isLoading = true
         ApiService
           .post(`/reply/${id}/comments`, payload)
           .then((res) => {
@@ -108,11 +125,15 @@ export const useReplyStore = defineStore({
             toast.error(err?.message || "Ошибка загрузки списка комментариев! Пожалуйста, попробуйте позже")
             reject()
           })
+          .finally(() => {
+            this.isLoading = false
+          })
       })
     },
     setReplyStatus(id, payload) {
       return new Promise((resolve, reject) => {
         console.log(id)
+        this.isLoading = true
         ApiService
           .post(`/reply/${id}/status`, payload)
           .then((res) => {
@@ -124,6 +145,9 @@ export const useReplyStore = defineStore({
             console.error(err)
             toast.error(err?.message || "Ошибка изменения статуса! Пожалуйста, попробуйте позже")
             reject()
+          })
+          .finally(() => {
+            this.isLoading = false
           })
       })
     },

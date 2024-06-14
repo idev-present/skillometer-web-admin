@@ -8,6 +8,7 @@ const {
 
 export const replyBuilder = (reply) => {
   console.log('reply', reply)
+  console.log('replyStatusList', replyStatusList)
   return {
     ...reply,
    statusEntity: {

@@ -2,6 +2,8 @@
 
 import { CheckCircleIcon, ChevronRightIcon, EnvelopeIcon } from '@heroicons/vue/20/solid/index.js'
 import { getLocalDate, getLocalDateTime } from './utils/getLocalDate.js'
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
+import { computed } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -34,6 +36,12 @@ const props = defineProps({
     default: () => ""
   },
 })
+
+const dictionaryStore = useDictionaryStore()
+
+const fullStatus = computed(() => {
+  return dictionaryStore.replyStatusList?.find((el) => el.key === props.status)
+})
 </script>
 
 <template>
@@ -63,7 +71,7 @@ const props = defineProps({
               </p>
               <p class="mt-2 flex items-center text-sm text-gray-500">
                 <CheckCircleIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400" aria-hidden="true" />
-                {{ status }}
+                {{ fullStatus?.value }}
               </p>
             </div>
           </div>

@@ -30,10 +30,7 @@
         </div>
         <div
           class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-3 sm:space-y-0 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
-          <button type="button"
-                  class="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            Disqualify
-          </button>
+
           <StatusResolver
             :id="replyId"
             :options="replyStore.availableStatuses || []"
@@ -42,6 +39,12 @@
             @update:model-value="onChangeStatus"
           />
         </div>
+      </div>
+      <div class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense">
+        <BaseAlert
+          title="Отказ на отклик."
+          description=" Сразу, с причинами и объяснениями отказа, а если еще и с каким-нибудь советом то тогда вообще отлично и как правильно остается очень много"
+        />
       </div>
 
       <div
@@ -62,6 +65,7 @@
         <TimelineForm/>
       </div>
     </main>
+    <LoadingIndicator :visible="isLoading" />
   </div>
 </template>
 
@@ -76,6 +80,8 @@ import ApplicantView from '@/pages/ApplicantView.vue'
 import Notes from '@/widgets/Notes.vue'
 import StatusResolver from '@/widgets/StatusResolver.vue'
 import { useReplyStore } from '@/app/store/modules/reply.js'
+import BaseAlert from '@/shared/BaseAlert.vue'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 
 
 
@@ -94,6 +100,13 @@ const comments = ref([])
 
 const replyId = computed(() => {
   return route?.params?.id
+})
+
+const isLoading = computed(() => {
+  return [
+    replyStore.isLoading,
+    applicantStore.isLoading,
+  ].some((e) => !!e)
 })
 
 const getNextStatus = () => {

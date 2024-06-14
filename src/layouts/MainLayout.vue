@@ -264,6 +264,7 @@ const getProfile = async () => {
 onMounted(async () => {
  await getProfile()
   const arr = [
+    dictionaryStore.fillReplyStatusList(),
     dictionaryStore.fillCurrencyList(),
     dictionaryStore.fillCityList(),
     dictionaryStore.fillEmploymentTypeList(),
@@ -271,7 +272,6 @@ onMounted(async () => {
     dictionaryStore.fillQualificationList(),
     dictionaryStore.fillSkillList(),
     dictionaryStore.fillSearchStatusList(),
-    dictionaryStore.fillReplyStatusList(),
   ]
   await Promise.all(arr)
 })

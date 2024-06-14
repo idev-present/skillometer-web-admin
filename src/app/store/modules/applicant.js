@@ -14,6 +14,7 @@ export const useApplicantStore = defineStore({
       applicantList: [],
       currentApplicant: null,
       isLoading: false,
+      resume: null
     }
   },
   actions: {
@@ -59,6 +60,21 @@ export const useApplicantStore = defineStore({
           })
           .finally(() => {
             this.isLoading = false
+          })
+      })
+    },
+    fillResume(payload = null) {
+      return new Promise((resolve, reject) => {
+        ApiService
+          .get("/user/cv", payload)
+          .then((res) => {
+            resolve(res || null)
+            this.resume = res || null
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки резюме! Пожалуйста, попробуйте позже")
+            reject()
           })
       })
     },
