@@ -4,6 +4,7 @@ import {  getLocalDateTime } from '../shared/utils/getLocalDate.js'
 import { ref } from 'vue'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 import { useUserStore } from '@/app/store/modules/user.js'
+import UserAvatar from '@/app/assets/icons/SVG/UserAvatar.vue'
 
 
 const props = defineProps({
@@ -53,9 +54,7 @@ const onSend = (e) => {
             <li v-for="comment in comments" :key="comment.id">
               <div class="flex space-x-3">
                 <div class="flex-shrink-0">
-                  <img class="h-10 w-10 rounded-full"
-                       src="https://toppng.com/uploads/preview/businessman-svg-icon-free-customer-lifetime-value-icon-11553438165x3txliv678.png"
-                       alt="" />
+                  <UserAvatar classes="h-10 w-10 rounded-full text-gray-400"/>
                 </div>
                 <div>
                   <div class="text-sm">
@@ -78,7 +77,7 @@ const onSend = (e) => {
       <div class="bg-gray-50 px-4 py-6 sm:px-6">
         <div class="flex space-x-3">
           <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="https://toppng.com/uploads/preview/businessman-svg-icon-free-customer-lifetime-value-icon-11553438165x3txliv678.png" alt="" />
+            <UserAvatar classes="h-10 w-10 rounded-full text-gray-400"/>
           </div>
           <div class="min-w-0 flex-1">
             <form @submit="onSend">

@@ -4,6 +4,7 @@ import { CheckCircleIcon, ChevronRightIcon, EnvelopeIcon, XCircleIcon } from '@h
 import { getLocalDate, getLocalDateTime } from './utils/getLocalDate.js'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { computed } from 'vue'
+import UserAvatar from '@/app/assets/icons/SVG/UserAvatar.vue'
 
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -61,7 +62,8 @@ const colorByStatus = computed(() => {
     <div class="flex items-center px-4 py-5 sm:px-0 sm:py-6">
       <div class="flex min-w-0 flex-1 items-center">
         <div class="flex-shrink-0">
-          <img class="h-12 w-12 rounded-full group-hover:opacity-75" :src="imageUrl" alt="" />
+<!--          <img class="h-12 w-12 rounded-full group-hover:opacity-75" :src="imageUrl" alt="" />-->
+          <UserAvatar classes="h-12 w-12 rounded-full group-hover:opacity-75 text-gray-400"/>
         </div>
         <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4 ">
           <div>
