@@ -290,14 +290,18 @@
                 <div class="pt-4 grid grid-cols-6 gap-4 sm:grid-cols-12 sm:gap-6">
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Электронная почта</div>
-                    <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      {{resume?.email || '-'}}
+                    <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700 hover:text-gray-900">
+                      <a v-if="resume?.email" :href="`mailto:${resume.email}`">
+                        {{resume?.email || '-'}}
+                      </a>
                     </div>
                   </div>
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Телефон</div>
-                    <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      {{resume?.phone ? maskPhone(resume.phone) : '-'}}
+                    <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700 hover:text-gray-900">
+                      <a v-if="resume.phone" :href="`tel:+7${resume.phone}`">
+                        {{resume?.phone ? maskPhone(resume.phone) : '-'}}
+                      </a>
                     </div>
                   </div>
                 </div>
