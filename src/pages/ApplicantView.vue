@@ -31,7 +31,7 @@ const props = defineProps({
         <div class="flex justify-between">
           <h2 id="applicant-information-title" class="text-lg font-medium leading-6 text-gray-900">Информация о
             кандидате</h2>
-          <span class="mt-1 max-w-2xl text-xs text-gray-500">Последний визит {{applicant?.lastVisited}}</span>
+          <span v-if="applicant?.lastVisited" class="mt-1 max-w-2xl text-xs text-gray-500">Последний визит {{applicant?.lastVisited}}</span>
         </div>
         <span class="mt-1 max-w-2xl text-sm text-gray-500">Личные данные</span>
 

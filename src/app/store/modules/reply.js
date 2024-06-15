@@ -18,7 +18,8 @@ export const useReplyStore = defineStore({
         statusEntity: null,
       },
       isLoading: false,
-      availableStatuses: []
+      availableStatuses: [],
+      comments: []
     }
   },
   actions: {
@@ -98,6 +99,7 @@ export const useReplyStore = defineStore({
           .get(`/reply/${id}/comments`)
           .then((res) => {
             const data = res ? camelize(res) : []
+            this.comments = data.reverse()
             resolve(data)
           })
           .catch((err) => {

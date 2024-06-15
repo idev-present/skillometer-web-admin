@@ -24,8 +24,9 @@
           </div>
           <div>
             <h1 class="text-2xl font-bold text-gray-900">{{ applicant?.title || 'Не указано' }}</h1>
-            <p class="text-sm font-medium text-gray-500">{{ applicant?.searchStatus?.key }} ·
-              {{ applicant?.experience || '' }}</p>
+            <div class="text-sm font-medium text-gray-500">{{ applicant?.searchStatus?.key }}
+              <div v-if="applicant?.experience">· {{ applicant?.experience || '' }} </div>
+            </div>
           </div>
         </div>
         <div
@@ -40,12 +41,6 @@
           />
         </div>
       </div>
-      <div class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense">
-        <BaseAlert
-          title="Отказ на отклик."
-          description=" Сразу, с причинами и объяснениями отказа, а если еще и с каким-нибудь советом то тогда вообще отлично и как правильно остается очень много"
-        />
-      </div>
 
       <div
         class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
@@ -56,7 +51,7 @@
           :applicant="applicant"
         />
         <Notes
-          :comments="comments"
+          :comments="replyStore.comments"
           :reply-id="replyId"
 
         />
@@ -145,9 +140,6 @@ onMounted(async() => {
     })
 
   replyStore.getReplyComments(replyId.value)
-    .then((res) => {
-      comments.value = res
-    })
 })
 
 </script>
