@@ -15,6 +15,7 @@ export const useUserStore = defineStore({
             skillometer_refresh_token: '',
             expires_in: '',
             isLoading: true,
+            contacts: null,
         }
     },
     actions: {
@@ -74,6 +75,38 @@ export const useUserStore = defineStore({
             Cookies.remove('skillometer_session_id');
             this.isAuth = false
             this.user = null
+        },
+        // get contacts
+        getContacts(payload = null) {
+            return new Promise((resolve, reject) => {
+                ApiService
+                  .get("/user/contacts", payload)
+                  .then((res) => {
+                      resolve(res)
+                      this.contacts = res
+                  })
+                  .catch((err) => {
+                      console.error(err)
+                      toast.error(err?.message || "Ошибка загрузки контактов! Пожалуйста, попробуйте позже")
+                      reject()
+                  })
+            })
+        },
+        // update contacts
+        updateContacts(payload = null) {
+            return new Promise((resolve, reject) => {
+                ApiService
+                  .put(`/user/contacts`, payload)
+                  .then((res) => {
+                      resolve(res)
+                      toast.success("Успешно")
+                  })
+                  .catch((err) => {
+                      console.error(err)
+                      toast.error(err?.message || "Ошибка сохранения контактов! Пожалуйста, попробуйте позже")
+                      reject()
+                  })
+            })
         },
     },
 })
