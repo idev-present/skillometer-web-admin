@@ -78,5 +78,21 @@ export const useApplicantStore = defineStore({
           })
       })
     },
+    downloadResume(id) {
+      return new Promise((resolve, reject) => {
+        ApiService
+          .get(`/applicant/download/${id}`)
+          .then((res) => {
+            resolve(res || null)
+            this.resume = res || null
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка скачивания резюме! Пожалуйста, попробуйте позже")
+            reject()
+          })
+      })
+    },
+
   },
 })

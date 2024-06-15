@@ -116,8 +116,6 @@ const getNextStatus = () => {
     return null
   }
   replyStore.getReplyNextStatusFlow(replyId.value)
-    .then((res) => {
-    })
 }
 
 const onChangeStatus = (e) => {

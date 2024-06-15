@@ -1,6 +1,6 @@
 <script setup>
 
-import { CheckCircleIcon, ChevronRightIcon, EnvelopeIcon } from '@heroicons/vue/20/solid/index.js'
+import { CheckCircleIcon, ChevronRightIcon, EnvelopeIcon, XCircleIcon } from '@heroicons/vue/20/solid/index.js'
 import { getLocalDate, getLocalDateTime } from './utils/getLocalDate.js'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { computed } from 'vue'
@@ -42,6 +42,15 @@ const dictionaryStore = useDictionaryStore()
 const fullStatus = computed(() => {
   return dictionaryStore.replyStatusList?.find((el) => el.key === props.status)
 })
+
+const colorByStatus = computed(() => {
+  if(props.status === "DECLINED") {
+    return 'text-red-600'
+  } else {
+    return 'text-green-400'
+  }
+
+})
 </script>
 
 <template>
@@ -54,7 +63,7 @@ const fullStatus = computed(() => {
         <div class="flex-shrink-0">
           <img class="h-12 w-12 rounded-full group-hover:opacity-75" :src="imageUrl" alt="" />
         </div>
-        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4 ">
           <div>
             <p class="truncate text-sm font-medium text-purple-600">{{ name }}</p>
             <p class="mt-2 flex items-center text-sm text-gray-500">
@@ -70,7 +79,8 @@ const fullStatus = computed(() => {
                 <span>{{ getLocalDateTime(appliedDatetime)  }}</span>
               </p>
               <p class="mt-2 flex items-center text-sm text-gray-500">
-                <CheckCircleIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400" aria-hidden="true" />
+                <XCircleIcon v-if="status === 'DECLINED'" class="mr-1.5 h-5 w-5 flex-shrink-0 text-red-600" aria-hidden="true" />
+                <CheckCircleIcon v-else class="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400" aria-hidden="true" />
                 {{ fullStatus?.value }}
               </p>
             </div>

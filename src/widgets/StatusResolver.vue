@@ -52,6 +52,7 @@ import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } f
 import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import RefuseModal from '@/widgets/RefuseModal.vue'
 import { useReplyStore } from '@/app/store/modules/reply.js'
+import router from '@/app/router/index.js'
 
 
 const replyStore = useReplyStore()
@@ -99,7 +100,7 @@ const onUpdate = (e) => {
     sendStatus(payload)
   }
 }
-
+console.log('window.history', window.history)
 const closeModal = () => {
   showRefuseModal.value = false
 }
@@ -110,6 +111,8 @@ const sendStatus = (payload) => {
         replyStore.getReply(props.id)
           .then(() => {
             replyStore.getReplyNextStatusFlow(props.id)
+            closeModal()
+            window.history.length > 2 ? router.go(-1) : router.push('/')
           })
     })
 }
