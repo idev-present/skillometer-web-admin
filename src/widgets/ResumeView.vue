@@ -314,8 +314,11 @@ import { CalendarIcon} from "@heroicons/vue/20/solid/index.js";
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import { useRoute } from 'vue-router'
 
 const isLoading = ref(false)
+
+const route = useRoute()
 
 //* store
 const applicantStore = useApplicantStore()
@@ -357,6 +360,10 @@ const resume = computed(() => {
   }
 })
 
+const currentResumeId = computed(() => {
+  return route?.params?.id
+})
+
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, '0');
@@ -377,6 +384,10 @@ const maskPhone = (phone) => {
 }
 
 onMounted(async () => {
-  await applicantStore.fillResume()
+  if(currentResumeId.value) {
+    await applicantStore.fillResume(currentResumeId.value)
+  } else {
+    console.error('id cv is not define')
+  }
 })
 </script>

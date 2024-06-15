@@ -281,7 +281,10 @@ const actionResolver = () => {
         .then((res) => {
           console.log(res)
         })
-        .finally(() => loading.value = false)
+        .finally(() => {
+          loading.value = false
+          back()
+        })
     }
     console.log('id.value', id.value)
     if(!id.value) {
@@ -292,7 +295,10 @@ const actionResolver = () => {
         .then(() => {
           router.push('/vacancies')
         })
-        .finally(() => loading.value = false)
+        .finally(() => {
+          loading.value = false
+          back()
+        })
     }
 
   }
