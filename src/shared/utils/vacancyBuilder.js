@@ -14,7 +14,6 @@ const {
 
 export const vacancyBuilder = (vac) => {
   const arrSkill = vac?.skillSet?.length ? vac.skillSet.split(',') :[]
-  console.log('arrSkill', arrSkill)
   const city = cityList.find((item) => item?.fiasId === vac?.cityId)
   return {
     ...vac,

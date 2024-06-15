@@ -55,7 +55,6 @@ const props = defineProps({
 })
 
 const updateValue = (event) => {
-  console.log(event)
   emit("update:modelValue", event);
 };
 const onFocus = (event) => {

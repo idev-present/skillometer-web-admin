@@ -31,7 +31,6 @@ export const useReplyStore = defineStore({
         ApiService
           .get("/reply/", payload)
           .then((res) => {
-            console.log(res)
             const data = res ? camelize(res) : []
             this.replyList = data
             resolve(data)
@@ -48,7 +47,6 @@ export const useReplyStore = defineStore({
     },
     getReply(payload) {
       return new Promise((resolve, reject) => {
-        console.log(payload)
         this.isLoading = true
         ApiService
           .get(`/reply/${payload}`)
@@ -70,7 +68,6 @@ export const useReplyStore = defineStore({
     },
     getReplyNextStatusFlow(id) {
       return new Promise((resolve, reject) => {
-        console.log(id)
         this.isLoading = true
         ApiService
           .get(`/reply/${id}/status`)
@@ -94,7 +91,6 @@ export const useReplyStore = defineStore({
     },
     getReplyComments(id) {
       return new Promise((resolve, reject) => {
-        console.log(id)
         this.isLoading = true
         ApiService
           .get(`/reply/${id}/comments`)
@@ -115,7 +111,6 @@ export const useReplyStore = defineStore({
     },
     sendReplyComment(id, payload) {
       return new Promise((resolve, reject) => {
-        console.log(id)
         this.isLoading = true
         ApiService
           .post(`/reply/${id}/comments`, payload)
@@ -135,12 +130,10 @@ export const useReplyStore = defineStore({
     },
     setReplyStatus(id, payload) {
       return new Promise((resolve, reject) => {
-        console.log(id)
         this.isLoading = true
         ApiService
           .post(`/reply/${id}/status`, payload)
           .then((res) => {
-            console.log(res)
             const data = res ? camelize(res) : []
             resolve(data)
           })
@@ -156,7 +149,6 @@ export const useReplyStore = defineStore({
     },
     getReplyCounts(id) {
       return new Promise((resolve, reject) => {
-        console.log(id)
         this.isLoading = true
         ApiService
           .get(`/reply/${id}/count`)

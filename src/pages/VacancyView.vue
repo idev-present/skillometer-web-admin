@@ -320,7 +320,6 @@ const onTabClick = (tab) => {
 }
 
 const changeVacancyStatus = (value) => {
-  console.log('value', value)
   if (!data.value?.id) {
     console.error('Vacancy id is not define')
     return
@@ -373,6 +372,7 @@ watchEffect(currentTab => {
 
 onMounted(() => {
   //TODO: Исправить на первую доступную вкладку из запроса
+  console.log('currentTab.value', currentTab.value)
   if (!currentTab.value) {
     const firstAvailableTab = tabs.value?.[0]?.status
     console.log('firstAvailableTab', firstAvailableTab)
@@ -380,6 +380,8 @@ onMounted(() => {
       router.push({ query: { tab: firstAvailableTab } })
     }
   }
+  getCount()
+
   const id = route.params?.id
   if (!id) {
     throw Error('Id is not define')
@@ -392,7 +394,6 @@ onMounted(() => {
       } else {
         selected.value = publishingOptions.value[1]
       }
-      getCount()
       getReplies()
     })
 })

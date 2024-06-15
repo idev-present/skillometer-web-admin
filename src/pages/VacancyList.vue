@@ -129,7 +129,6 @@ const vacancyStore = useVacancyStore()
 const router = useRouter()
 
 const onRemove = (id) => {
-  console.log('id', id)
   isConfirmModal.value = true
   removedId.value = id
 }
@@ -163,7 +162,6 @@ const confirmAction = () => {
 const fillVacancies = async () => {
   isLoading.value = true
   await vacancyStore.fillVacancyList().then((res) => {
-    console.log('fillVacancyList', res)
     vacancies.value = res
   })
     .finally(() => isLoading.value = false)

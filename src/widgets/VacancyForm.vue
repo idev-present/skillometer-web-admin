@@ -267,24 +267,19 @@ const payloadBuilder = () => {
 const actionResolver = () => {
   const data = payloadBuilder()
   errors.value = VacancyForm.validate(data)
-  console.log(errors.value)
   const step = route.params?.operation
-  console.log('step', step)
   if(!errors.value && !loading.value) {
     const preparedData = decamelize(data)
-    console.log(data)
     loading.value = true
     if(step === 'create') {
       vacancyStore.createVacancy(preparedData)
         .then((res) => {
-          console.log(res)
         })
         .finally(() => {
           loading.value = false
           back()
         })
     }
-    console.log('id.value', id.value)
     if(!id.value) {
       console.error('Id is not define')
     }
@@ -321,7 +316,6 @@ const fillFields = (data) => {
 
 onMounted(async() => {
   if(route.params?.operation === 'edit' && route.params?.id) {
-    console.log('test')
     await vacancyStore.getVacancy(route.params.id)
       .then((res) => fillFields(res))
   }

@@ -231,7 +231,6 @@ const saveForm = async () => {
     city: user?.value?.city?.id || '',
     bio: user?.value?.description || '',
   }
-  console.log(payload)
   errors.value = ProfileForm.validate(payload)
   if(!errors.value && !isLoading.value) {
     isLoading.value = true

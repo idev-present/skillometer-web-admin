@@ -42,12 +42,10 @@ export const useVacancyStore = defineStore({
       createVacancy(payload) {
           return new Promise((resolve, reject) => {
             this.isLoading = true
-            console.log(payload)
               ApiService
                 .post("/vacancy/", payload)
                 .then((res) => {
                     resolve()
-                    console.log('res', res)
                 })
                 .catch((err) => {
                     console.error(err)
@@ -70,7 +68,6 @@ export const useVacancyStore = defineStore({
               const preparedData = vacancyBuilder(data)
               this.currentVacancy = preparedData
               resolve(preparedData)
-              console.log('res', res)
             })
             .catch((err) => {
               console.error(err)
@@ -85,7 +82,6 @@ export const useVacancyStore = defineStore({
       editVacancy(id, payload) {
         return new Promise((resolve, reject) => {
           this.isLoading = true
-          console.log(payload)
           ApiService
             .put(`/vacancy/${id}`, payload)
             .then(() => {
@@ -129,7 +125,6 @@ export const useVacancyStore = defineStore({
               const preparedData = vacancyBuilder(data)
               this.currentVacancy = preparedData
               resolve(preparedData)
-              console.log('res', res)
             })
             .catch((err) => {
               console.error(err)
@@ -151,7 +146,6 @@ export const useVacancyStore = defineStore({
               const preparedData = vacancyBuilder(data)
               this.currentVacancy = preparedData
               resolve(preparedData)
-              console.log('res', res)
             })
             .catch((err) => {
               console.error(err)

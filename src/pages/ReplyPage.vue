@@ -130,11 +130,9 @@ onMounted(async() => {
   }
   replyStore.getReply(replyId.value)
     .then((res) => {
-      console.log('res', res)
       if(res?.applicantId) {
         applicantStore.getApplicant(res.applicantId)
           .then((res) => {
-            console.log('res', res)
             applicant.value = res
           })
       } else {

@@ -13,7 +13,6 @@ const {
 
 export const applicantBuilder = (applicant) => {
   const arrSkill = applicant?.skillSet?.length ? applicant.skillSet.split(',') :[]
-  console.log('arrSkill', arrSkill)
   const city = cityList.find((item) => item?.habrAlias === applicant?.cityId)
   return {
     ...applicant,

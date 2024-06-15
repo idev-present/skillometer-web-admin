@@ -91,7 +91,6 @@ const applicantStore = useApplicantStore()
 const fillApplicants = async () => {
   isLoading.value = true
   await applicantStore.fillApplicantList().then((res) => {
-    console.log('fillApplicantList', res)
     applicants.value = res
   })
     .finally(() => isLoading.value = false)

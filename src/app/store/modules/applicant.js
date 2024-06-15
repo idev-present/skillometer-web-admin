@@ -25,7 +25,6 @@ export const useApplicantStore = defineStore({
         ApiService
           .get("/applicant/", payload)
           .then((res) => {
-            console.log(res)
             const data = res ? camelize(res) : null
             const preparedData = data.map((item) => applicantBuilder(item))
             this.applicantList = preparedData
@@ -44,7 +43,6 @@ export const useApplicantStore = defineStore({
     getApplicant(payload) {
       return new Promise((resolve, reject) => {
         this.isLoading = true
-        console.log(payload)
         ApiService
           .get(`/applicant/${payload}`)
           .then((res) => {

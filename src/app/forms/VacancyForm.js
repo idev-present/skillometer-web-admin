@@ -20,7 +20,6 @@ export const VacancyFormSchema = object({
 
 export const VacancyForm = {
   validate(fields) {
-    console.log('fields', fields)
     try {
       VacancyFormSchema.validateSync(fields, { abortEarly: false });
     } catch (err) {

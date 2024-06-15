@@ -80,7 +80,6 @@ const props = defineProps({
 })
 
 const updateWithReason = (reason) => {
-  console.log(reason)
   const payload = {
     status: tempStatus.value,
     reason: reason
@@ -90,7 +89,6 @@ const updateWithReason = (reason) => {
 }
 
 const onUpdate = (e) => {
-  console.log(e.status.key)
   if(e?.isRequiredReason && e?.status?.key) {
     showRefuseModal.value = true
     tempStatus.value = e.status.key
@@ -102,7 +100,6 @@ const onUpdate = (e) => {
     sendStatus(payload)
   }
 }
-console.log('window.history', window.history)
 const closeModal = () => {
   showRefuseModal.value = false
 }
