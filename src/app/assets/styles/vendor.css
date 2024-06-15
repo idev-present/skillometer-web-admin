@@ -1,4 +1,5 @@
 @import "qalendar/dist/style.css";
+@import '@vuepic/vue-datepicker/dist/main.css';
 
 .ck-content > blockquote,
 .ck-content > dl,

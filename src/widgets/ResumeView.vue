@@ -44,13 +44,13 @@
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Имя Фамилия</div>
                     <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      ХЗ
+                      {{resume?.title || '-'}}
                     </div>
                   </div>
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Пол</div>
                     <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      ХЗ
+                      {{resume?.isGender ? resume.gender : '-'}}
                     </div>
                   </div>
                 </div>
@@ -58,13 +58,13 @@
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Возраст</div>
                     <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      ХЗ - не правильно
+                      {{resume?.age || '-'}}
                     </div>
                   </div>
                   <div class="col-span-6">
                     <div class="text-sm font-medium leading-6 text-gray-900">Город</div>
                     <div class="mt-0.5 flex items-center text-sm leading-6 text-gray-700">
-                      ХЗ - не правильно
+                      {{resume?.city?.name || '-'}}
                     </div>
                   </div>
                 </div>
@@ -370,6 +370,9 @@ const resume = computed(() => {
       ...item,
       city: cityList?.value?.find((e) => e.id === (item?.city_id || '')) || null,
     })) || [],
+    city: cityList?.value?.find((e) => e.id === (applicantStore?.resume?.city_id || '')) || null,
+    isGender: applicantStore?.resume?.gender || false,
+    gender: applicantStore?.resume?.gender === 'male' ? 'Мужской' : 'Женский',
   }
 })
 
