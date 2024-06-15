@@ -9,7 +9,6 @@ export const ProfileFormSchema = object({
   birthday: string().required("Необходимо заполнить поле"),
   city: string().required("Необходимо заполнить поле"),
   bio: string().required("Необходимо заполнить поле"),
-  description: string().required("Необходимо заполнить поле"),
 })
 
 export const ProfileForm = {
