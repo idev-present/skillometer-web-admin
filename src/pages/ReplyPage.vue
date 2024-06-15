@@ -8,7 +8,7 @@
     ```
   -->
   <div class="min-h-full">
-
+    <BaseBreadcrumbs :pages="breadcrumbs"/>
     <main class="py-10">
       <!-- Page header -->
       <div
@@ -75,8 +75,8 @@ import ApplicantView from '@/pages/ApplicantView.vue'
 import Notes from '@/widgets/Notes.vue'
 import StatusResolver from '@/widgets/StatusResolver.vue'
 import { useReplyStore } from '@/app/store/modules/reply.js'
-import BaseAlert from '@/shared/BaseAlert.vue'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import BaseBreadcrumbs from '@/shared/BaseBreadcrumbs.vue'
 
 
 
@@ -102,6 +102,12 @@ const isLoading = computed(() => {
     replyStore.isLoading,
     applicantStore.isLoading,
   ].some((e) => !!e)
+})
+
+const breadcrumbs = computed(() => {
+  return [
+    { name: 'Список вакансий', href: '/vacancies', current: false },
+  ]
 })
 
 const getNextStatus = () => {

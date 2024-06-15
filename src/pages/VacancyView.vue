@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-full">
+  <BaseBreadcrumbs :pages="breadcrumbs"/>
     <!-- Page heading -->
     <header class="bg-gray-50 py-8">
       <div class="mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between">
@@ -24,7 +25,7 @@
               <AcademicCapIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
               {{ data?.qualification?.name || '-' }}
             </div>
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div v-if="data?.localPublishedDate" class="mt-2 flex items-center text-sm text-gray-500">
               <CalendarIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
               Дата публикации: {{ data?.localPublishedDate || '-' }}
             </div>
@@ -246,6 +247,7 @@ import { useReplyStore } from '@/app/store/modules/reply.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { register } from 'swiper/element/bundle'
+import BaseBreadcrumbs from '@/shared/BaseBreadcrumbs.vue'
 
 register()
 const route = useRoute()
@@ -263,13 +265,13 @@ const publishingOptions = computed(() => {
       return [
         {
           name: 'Опубликована',
-          description: 'This job posting can be viewed by anyone who has the link.',
+          description: 'Вакансия активна и доступна для просмотра потенциальным кандидатам.',
           isPublish: true,
           disabled: true,
         },
         {
           name: 'Не опубликована',
-          description: 'This job posting will no longer be publicly accessible.',
+          description: 'Вакансия может быть в стадии редактирования или ожидания публикации.',
           isPublish: false,
           disabled: false,
         },
@@ -299,6 +301,13 @@ const selected = ref()
 
 const currentTab = computed(() => {
   return route.query?.tab
+})
+
+const breadcrumbs = computed(() => {
+  return [
+    { name: 'Список вакансий', href: '/vacancies', current: false },
+    { name: `${data.value?.name || ''}`, disabled: true },
+  ]
 })
 
 const onTabClick = (tab) => {
