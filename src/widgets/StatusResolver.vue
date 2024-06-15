@@ -59,6 +59,7 @@ const replyStore = useReplyStore()
 
 const showRefuseModal = ref(false)
 const tempStatus = ref(null)
+const isDecline = ref(false)
 
 
 
@@ -84,6 +85,7 @@ const updateWithReason = (reason) => {
     status: tempStatus.value,
     reason: reason
   }
+  isDecline.value = true
   sendStatus(payload)
 }
 
@@ -112,7 +114,11 @@ const sendStatus = (payload) => {
           .then(() => {
             replyStore.getReplyNextStatusFlow(props.id)
             closeModal()
-            window.history.length > 2 ? router.go(-1) : router.push('/')
+            if(isDecline.value) {
+              window.history.length > 2 ? router.go(-1) : router.push('/')
+            } else {
+              isDecline.value = false
+            }
           })
     })
 }

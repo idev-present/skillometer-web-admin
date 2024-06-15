@@ -19,7 +19,8 @@ export const useReplyStore = defineStore({
       },
       isLoading: false,
       availableStatuses: [],
-      comments: []
+      comments: [],
+      replyCounts: []
     }
   },
   actions: {
@@ -146,6 +147,27 @@ export const useReplyStore = defineStore({
           .catch((err) => {
             console.error(err)
             toast.error(err?.message || "Ошибка изменения статуса! Пожалуйста, попробуйте позже")
+            reject()
+          })
+          .finally(() => {
+            this.isLoading = false
+          })
+      })
+    },
+    getReplyCounts(id) {
+      return new Promise((resolve, reject) => {
+        console.log(id)
+        this.isLoading = true
+        ApiService
+          .get(`/reply/${id}/count`)
+          .then((res) => {
+            const data = res ? camelize(res) : []
+            this.replyCounts = data
+            resolve(data)
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки количества откликов! Пожалуйста, попробуйте позже")
             reject()
           })
           .finally(() => {

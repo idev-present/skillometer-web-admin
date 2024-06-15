@@ -150,7 +150,7 @@
 
     <main class="pb-16 pt-8">
       <div class="mx-auto sm:px-6 lg:px-8">
-        <div class="px-4 sm:px-0">
+        <div class="tabs px-4 sm:px-0">
           <h2 class="text-lg font-medium text-gray-900">Отклики</h2>
           <!-- Tabs -->
           <div class="sm:hidden">
@@ -165,15 +165,12 @@
           </div>
           <div class="sm:block">
             <div class="border-b border-gray-200">
-              <swiper-container
-                :slides-per-view="5"
-              >
-                <swiper-slide
-                  v-for="tab in dictionaryStore.replyStatusList"
-                  :key="tab.key"
-                >
-                  <nav class="-mb-px mt-2 flex justify-center space-x-8 w-20 cursor-pointer" aria-label="Tabs">
+
+                  <nav
+                    class="-mb-px mt-2 flex space-x-8 cursor-pointer overflow-y-auto" aria-label="Tabs">
                     <div
+                      v-for="tab in tabs"
+                      :key="tab.key"
                       :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap px-1 py-4 text-sm font-medium']"
                       @click="onTabClick(tab)"
                     >
@@ -184,17 +181,12 @@
                       </span>
                     </div>
                   </nav>
-                </swiper-slide>
-
-              </swiper-container>
-
-
             </div>
           </div>
         </div>
 
         <!-- Stacked list -->
-        <ul role="list" class="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
+        <ul v-if="replies?.length" role="list" class="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
           <li v-for="reply in replies" :key="reply.id">
             <ReplyListItem
               :id="reply.id"
@@ -206,6 +198,11 @@
             />
           </li>
         </ul>
+        <EmptyState
+          v-else
+          title="Отклики не найдены"
+          description="В данный момент нет откликов с данным статусом"
+        />
 
         <!-- Pagination -->
         <Pagination />
@@ -216,7 +213,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 import {
   Listbox,
   ListboxButton,
@@ -248,6 +245,7 @@ import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { register } from 'swiper/element/bundle'
 import BaseBreadcrumbs from '@/shared/BaseBreadcrumbs.vue'
+import EmptyState from '@/shared/EmptyState.vue'
 
 register()
 const route = useRoute()
@@ -303,6 +301,13 @@ const currentTab = computed(() => {
   return route.query?.tab
 })
 
+const tabs = computed(() => {
+  return dictionaryStore.replyStatusList.map((tab) => ({
+    ...tab,
+      count: replyStore.replyCounts.find((item) => item?.status === tab.key )?.count
+  }))
+})
+
 const breadcrumbs = computed(() => {
   return [
     { name: 'Список вакансий', href: '/vacancies', current: false },
@@ -343,11 +348,37 @@ const changeVacancyStatus = (value) => {
   }
 }
 
+const getCount = () => {
+  const id = route?.params?.id
+  if(!id) {
+    console.error('vacancy id is not define')
+    return
+  }
+  replyStore.getReplyCounts(id)
+}
+
+const getReplies = () => {
+  const id = route.params?.id
+  if(id) {
+    replyStore.fillReplyList({status: currentTab.value || 'NEW', vacancy_id: id})
+      .then((res) => {
+        replies.value = res
+      })
+  }
+}
+
+watchEffect(currentTab => {
+  getReplies()
+})
+
 onMounted(() => {
   //TODO: Исправить на первую доступную вкладку из запроса
   if (!currentTab.value) {
-    router.push({ query: { tab: 'NEW' } })
-
+    const firstAvailableTab = tabs.value?.[0]?.status
+    console.log('firstAvailableTab', firstAvailableTab)
+    if(firstAvailableTab) {
+      router.push({ query: { tab: firstAvailableTab } })
+    }
   }
   const id = route.params?.id
   if (!id) {
@@ -361,12 +392,33 @@ onMounted(() => {
       } else {
         selected.value = publishingOptions.value[1]
       }
-      replyStore.fillReplyList()
-        .then((res) => {
-          replies.value = res
-        })
+      getCount()
+      getReplies()
     })
 })
 
 
 </script>
+<style lang="scss" scoped>
+.tabs {
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #98939a #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #98939a;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
+}
+</style>
