@@ -208,7 +208,7 @@
         <Pagination />
       </div>
     </main>
-    <LoadingIndicator :visible="vacancyStore.isLoading" />
+    <LoadingIndicator :visible="loading" />
   </div>
 </template>
 
@@ -315,6 +315,10 @@ const breadcrumbs = computed(() => {
   ]
 })
 
+const loading = computed(() => {
+  return [vacancyStore.isLoading, replyStore.isLoading].some((item) => item)
+})
+
 const onTabClick = (tab) => {
   router.push({ query: { tab: tab.key } })
 }
@@ -370,15 +374,9 @@ watchEffect(currentTab => {
   getReplies()
 })
 
-onMounted(() => {
-  //TODO: Исправить на первую доступную вкладку из запроса
-  console.log('currentTab.value', currentTab.value)
+onMounted(async () => {
   if (!currentTab.value) {
-    const firstAvailableTab = tabs.value?.[0]?.status
-    console.log('firstAvailableTab', firstAvailableTab)
-    if(firstAvailableTab) {
-      router.push({ query: { tab: firstAvailableTab } })
-    }
+    router.push({ query: { tab: 'NEW' } })
   }
   getCount()
 
@@ -386,7 +384,7 @@ onMounted(() => {
   if (!id) {
     throw Error('Id is not define')
   }
-  vacancyStore.getVacancy(id)
+  await vacancyStore.getVacancy(id)
     .then((res) => {
       data.value = res
       if (res?.publishedAt) {
