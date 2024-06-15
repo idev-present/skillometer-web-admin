@@ -68,25 +68,6 @@ export const useUserStore = defineStore({
             })
         },
         logout(payload = null) {
-            // return new Promise((resolve, reject) => {
-            //     ApiService
-            //         .post(`/user/logout`, null)
-            //         .then((res) => {
-            //             console.log(res)
-            //             resolve(res || null)
-            //             this.user = null
-            //             this.isAuth = false
-            //         })
-            //         .catch((err) => {
-            //             if(!err?.response?.data?.detail) {
-            //                 console.error(err)
-            //                 toast.error(err?.message || "Ошибка авторизации! Пожалуйста, попробуйте позже")
-            //             } else {
-            //                 this.isAuth = false
-            //             }
-            //             reject()
-            //         })
-            // })
             Cookies.remove('skillometer_access_token');
             Cookies.remove('skillometer_refresh_token');
             Cookies.remove('expires_in');

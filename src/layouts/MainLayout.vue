@@ -176,7 +176,7 @@
 </template>
 
 <script setup>
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import { computed, onMounted, ref } from 'vue'
 import {
   Dialog,
@@ -221,6 +221,7 @@ const sidebarOpen = ref(false)
 const isLoading = ref(false)
 
 const route = useRoute()
+const router = useRouter()
 
 const userStore = useUserStore()
 
@@ -245,12 +246,11 @@ const singIn = () => {
   window.location.href = targetUrl
 }
 
-const logout = async () => {
-  isLoading.value = true
-  await userStore.logout().finally(() => {
-    isLoading.value = false
-  })
-  // mobileMenuOpen.value = false
+const logout = () => {
+  userStore.logout()
+  const targetUrl = iamService.sdk.getSigninUrl()
+  window.location.href = targetUrl
+
 }
 
 const getProfile = async () => {
