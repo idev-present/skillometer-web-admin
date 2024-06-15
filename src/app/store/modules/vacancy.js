@@ -18,48 +18,48 @@ export const useVacancyStore = defineStore({
     },
     actions: {
         // Vacancy List
-        fillVacancyList(payload = null) {
-            return new Promise((resolve, reject) => {
-                this.isLoading = true
-                ApiService
-                    .get("/vacancy/", payload)
-                    .then((res) => {
-                      const data = res?.length ? camelize(res) : []
-                      const preparedData = data.map((item) => vacancyBuilder(item))
-                      this.vacancyList = preparedData
-                        resolve(preparedData)
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        toast.error(err?.message || "Ошибка загрузки списка вакансий! Пожалуйста, попробуйте позже")
-                        reject()
-                    })
-                  .finally(() => {
-                    this.isLoading = false
-                  })
-            })
-        },
-        createVacancy(payload) {
-            return new Promise((resolve, reject) => {
+      fillVacancyList(payload = null) {
+          return new Promise((resolve, reject) => {
               this.isLoading = true
-              console.log(payload)
-                ApiService
-                  .post("/vacancy/", payload)
+              ApiService
+                  .get("/vacancy/", payload)
                   .then((res) => {
-                      resolve()
-                      console.log('res', res)
+                    const data = res?.length ? camelize(res) : []
+                    const preparedData = data.map((item) => vacancyBuilder(item))
+                    this.vacancyList = preparedData
+                      resolve(preparedData)
                   })
                   .catch((err) => {
                       console.error(err)
-                      toast.error(err?.message || "Ошибка создания вакансии! Пожалуйста, попробуйте позже")
+                      toast.error(err?.message || "Ошибка загрузки списка вакансий! Пожалуйста, попробуйте позже")
                       reject()
                   })
-                  .finally(() => {
-                    this.isLoading = false
-                  })
-            })
+                .finally(() => {
+                  this.isLoading = false
+                })
+          })
+      },
+      createVacancy(payload) {
+          return new Promise((resolve, reject) => {
+            this.isLoading = true
+            console.log(payload)
+              ApiService
+                .post("/vacancy/", payload)
+                .then((res) => {
+                    resolve()
+                    console.log('res', res)
+                })
+                .catch((err) => {
+                    console.error(err)
+                    toast.error(err?.message || "Ошибка создания вакансии! Пожалуйста, попробуйте позже")
+                    reject()
+                })
+                .finally(() => {
+                  this.isLoading = false
+                })
+          })
 
-        },
+      },
       getVacancy(payload) {
         return new Promise((resolve, reject) => {
           this.isLoading = true
@@ -118,6 +118,50 @@ export const useVacancyStore = defineStore({
               this.isLoading = false
             })
         })
-      }
+      },
+      publishVacancy(id){
+        return new Promise((resolve, reject) => {
+          this.isLoading = true
+          ApiService
+            .get(`/vacancy/${id}/publish`)
+            .then((res) => {
+              const data = res ? camelize(res) : null
+              const preparedData = vacancyBuilder(data)
+              this.currentVacancy = preparedData
+              resolve(preparedData)
+              console.log('res', res)
+            })
+            .catch((err) => {
+              console.error(err)
+              toast.error(err?.message || "Ошибка смены статуса публикации! Пожалуйста, попробуйте позже")
+              reject()
+            })
+            .finally(() => {
+              this.isLoading = false
+            })
+        })
+      },
+      unpublishVacancy(id){
+        return new Promise((resolve, reject) => {
+          this.isLoading = true
+          ApiService
+            .get(`/vacancy/${id}/unpublish`)
+            .then((res) => {
+              const data = res ? camelize(res) : null
+              const preparedData = vacancyBuilder(data)
+              this.currentVacancy = preparedData
+              resolve(preparedData)
+              console.log('res', res)
+            })
+            .catch((err) => {
+              console.error(err)
+              toast.error(err?.message || "Ошибка смены статуса публикации! Пожалуйста, попробуйте позже")
+              reject()
+            })
+            .finally(() => {
+              this.isLoading = false
+            })
+        })
+      },
     },
 })

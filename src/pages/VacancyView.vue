@@ -5,28 +5,28 @@
       <div class="mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between">
         <div class="min-w-0 flex-1">
           <h1 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-            {{data?.name || 'Не указано'}}
+            {{ data?.name || 'Не указано' }}
           </h1>
           <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-8">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <BriefcaseIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              {{data?.employmentType?.name || 'Не указано'}}
+              {{ data?.employmentType?.name || 'Не указано' }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <MapPinIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              {{data?.isRemote ? 'Удаленно' : 'Не удаленно'}}
+              {{ data?.isRemote ? 'Удаленно' : 'Не удаленно' }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <CurrencyDollarIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              {{data?.salaryString || '-'}} {{data?.currency?.value || ''}}
+              {{ data?.salaryString || '-' }} {{ data?.currency?.value || '' }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <AcademicCapIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              {{data?.qualification?.name || '-'}}
+              {{ data?.qualification?.name || '-' }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <CalendarIcon class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              Дата публикации: {{data?.localPublishedDate || '-'}}
+              Дата публикации: {{ data?.localPublishedDate || '-' }}
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@
             <RouterLink
               :to="`/vacancies/edit/${data?.id}`"
               type="button"
-                    class="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              class="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <PencilIcon class="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
               Редактировать
             </RouterLink>
@@ -65,7 +65,13 @@
             </a>
           </span>
 
-          <Listbox as="div" v-model="selected" class="sm:ml-3">
+          <Listbox
+            as="div"
+            v-model="selected"
+            class="sm:ml-3"
+            :model-value="selected"
+            @update:model-value="changeVacancyStatus"
+          >
             <ListboxLabel class="sr-only">Change published status</ListboxLabel>
             <div class="relative">
               <div class="inline-flex divide-x divide-purple-600 rounded-md shadow-sm">
@@ -73,7 +79,7 @@
                   <div
                     class="inline-flex items-center gap-x-1.5 rounded-l-md bg-purple-500 px-3 py-2 text-white shadow-sm">
                     <CheckIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
-                    <p class="text-sm font-semibold">{{ selected.name }}</p>
+                    <p class="text-sm font-semibold">{{ selected?.name }}</p>
                   </div>
                   <ListboxButton
                     class="inline-flex items-center rounded-l-none rounded-r-md bg-purple-500 p-2 hover:bg-purple-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50">
@@ -87,8 +93,14 @@
                           leave-to-class="opacity-0">
                 <ListboxOptions
                   class="absolute left-0 z-10 -mr-1 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:left-auto sm:right-0">
-                  <ListboxOption as="template" v-for="option in publishingOptions" :key="option.name" :value="option"
-                                 v-slot="{ active, selected }">
+                  <ListboxOption
+                    as="template"
+                    v-for="option in publishingOptions"
+                    :key="option.name"
+                    :value="option"
+                    v-slot="{ active, selected }"
+                    :disabled="option?.disabled"
+                  >
                     <li
                       :class="[active ? 'bg-purple-500 text-white' : 'text-gray-900', 'cursor-default select-none p-4 text-sm']">
                       <div class="flex flex-col">
@@ -145,7 +157,9 @@
             <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
             <select id="tabs" name="tabs"
                     class="mt-4 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-500">
-              <option v-for="tab in dictionaryStore.replyStatusList" :key="tab.key" :selected="tab.current">{{ tab.value }}</option>
+              <option v-for="tab in dictionaryStore.replyStatusList" :key="tab.key" :selected="tab.current">{{ tab.value
+                }}
+              </option>
             </select>
           </div>
           <div class="sm:block">
@@ -196,7 +210,7 @@
         <Pagination />
       </div>
     </main>
-    <LoadingIndicator :visible="vacancyStore.isLoading"/>
+    <LoadingIndicator :visible="vacancyStore.isLoading" />
   </div>
 </template>
 
@@ -222,7 +236,7 @@ import {
   CurrencyDollarIcon,
   LinkIcon,
   MapPinIcon,
-  PencilIcon,
+  PencilIcon
 } from '@heroicons/vue/20/solid'
 import ReplyListItem from '@/shared/ReplyListItem.vue'
 import Pagination from '@/shared/Pagination.vue'
@@ -231,9 +245,9 @@ import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
-import { register } from 'swiper/element/bundle';
+import { register } from 'swiper/element/bundle'
 
-register();
+register()
 const route = useRoute()
 
 const router = useRouter()
@@ -244,13 +258,44 @@ const replyStore = useReplyStore()
 
 const dictionaryStore = useDictionaryStore()
 
-const publishingOptions = [
-  { name: 'Опубликована', description: 'This job posting can be viewed by anyone who has the link.', current: true },
-  { name: 'Не опубликована', description: 'This job posting will no longer be publicly accessible.', current: false }
-]
+const publishingOptions = computed(() => {
+    if (data.value?.publishedAt) {
+      return [
+        {
+          name: 'Опубликована',
+          description: 'This job posting can be viewed by anyone who has the link.',
+          isPublish: true,
+          disabled: true,
+        },
+        {
+          name: 'Не опубликована',
+          description: 'This job posting will no longer be publicly accessible.',
+          isPublish: false,
+          disabled: false,
+        },
+      ]
+    } else {
+      return [
+        {
+          name: 'Опубликована',
+          description: 'This job posting can be viewed by anyone who has the link.',
+          isPublish: true,
+          disabled: false,
+        },
+        {
+          name: 'Не опубликована',
+          description: 'This job posting will no longer be publicly accessible.',
+          isPublish: false,
+          disabled: true,
+        },
+      ]
+    }
+  }
+)
 
 const data = ref(null)
 const replies = ref(null)
+const selected = ref()
 
 const currentTab = computed(() => {
   return route.query?.tab
@@ -260,19 +305,53 @@ const onTabClick = (tab) => {
   router.push({ query: { tab: tab.key } })
 }
 
+const changeVacancyStatus = (value) => {
+  console.log('value', value)
+  if (!data.value?.id) {
+    console.error('Vacancy id is not define')
+    return
+  }
+  if (!value?.isPublish) {
+    vacancyStore.unpublishVacancy(data.value?.id)
+      .then((res) => {
+        data.value = res
+        if (res?.publishedAt) {
+          selected.value = publishingOptions.value[0]
+        } else {
+          selected.value = publishingOptions.value[1]
+        }
+      })
+  } else {
+    vacancyStore.publishVacancy(data.value?.id)
+      .then((res) => {
+        data.value = res
+        if (res?.publishedAt) {
+          selected.value = publishingOptions.value[0]
+        } else {
+          selected.value = publishingOptions.value[1]
+        }
+      })
+  }
+}
+
 onMounted(() => {
   //TODO: Исправить на первую доступную вкладку из запроса
-  if(!currentTab.value) {
-    router.push({ query: { tab: "NEW" } })
+  if (!currentTab.value) {
+    router.push({ query: { tab: 'NEW' } })
 
   }
   const id = route.params?.id
-  if(!id) {
+  if (!id) {
     throw Error('Id is not define')
   }
   vacancyStore.getVacancy(id)
     .then((res) => {
       data.value = res
+      if (res?.publishedAt) {
+        selected.value = publishingOptions.value[0]
+      } else {
+        selected.value = publishingOptions.value[1]
+      }
       replyStore.fillReplyList()
         .then((res) => {
           replies.value = res
@@ -281,5 +360,4 @@ onMounted(() => {
 })
 
 
-const selected = ref(publishingOptions[0])
 </script>
