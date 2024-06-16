@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: web-admin
-          image: ilyamachetto/skillometer-web-admin:0.6.3
+          image: ilyamachetto/skillometer-web-admin:0.7.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
