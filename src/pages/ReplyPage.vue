@@ -90,7 +90,9 @@
           />
         </div>
 
-        <TimelineForm/>
+        <TimelineForm
+          :user-reply-activity="replyStore.activityList"
+        />
       </div>
     </main>
     <LoadingIndicator :visible="isLoading" />
@@ -187,7 +189,8 @@ onMounted(async() => {
 
     })
 
-  replyStore.getReplyComments(replyId.value)
+  await replyStore.getReplyComments(replyId.value)
+  await replyStore.getActivity(replyId.value)
 })
 
 </script>

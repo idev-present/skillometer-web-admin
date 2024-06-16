@@ -1,115 +1,51 @@
-<script setup>
-import { CheckIcon, HandThumbUpIcon, UserIcon, XMarkIcon } from '@heroicons/vue/20/solid/index.js'
-import { computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useReplyStore } from '@/app/store/modules/reply.js'
-
-const route = useRoute()
-const replyStore = useReplyStore()
-
-const eventTypes = {
-  applied: { icon: UserIcon, bgColorClass: 'bg-gray-400' },
-  advanced: { icon: HandThumbUpIcon, bgColorClass: 'bg-blue-500' },
-  completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' },
-  decline: { icon: XMarkIcon(), bgColorClass: 'bg-red-500' },
-}
-
-const timeline = [
-  {
-    id: 1,
-    type: eventTypes.applied,
-    content: 'Applied to',
-    target: 'Front End Developer',
-    date: 'Sep 20',
-    datetime: '2020-09-20'
-  },
-  {
-    id: 2,
-    type: eventTypes.advanced,
-    content: 'Advanced to phone screening by',
-    target: 'Bethany Blake',
-    date: 'Sep 22',
-    datetime: '2020-09-22'
-  },
-  {
-    id: 3,
-    type: eventTypes.completed,
-    content: 'Completed phone screening with',
-    target: 'Martha Gardner',
-    date: 'Sep 28',
-    datetime: '2020-09-28'
-  },
-  {
-    id: 4,
-    type: eventTypes.advanced,
-    content: 'Advanced to interview by',
-    target: 'Bethany Blake',
-    date: 'Sep 30',
-    datetime: '2020-09-30'
-  },
-  {
-    id: 5,
-    type: eventTypes.completed,
-    content: 'Completed interview with',
-    target: 'Katherine Snyder',
-    date: 'Oct 4',
-    datetime: '2020-10-04'
-  },
-  {
-    id: 5,
-    type: eventTypes.decline,
-    content: 'Completed interview with',
-    target: 'Katherine Snyder',
-    date: 'Oct 4',
-    datetime: '2020-10-04'
-  }
-]
-
-const replyId = computed(() => {
-  return route?.params?.id
-})
-
-const activityList = computed(() => {
-  return replyStore.activityList || []
-})
-
-onMounted(async() => {
-  if(!replyId.value) {
-    console.error('reply id is not define')
-    return
-  }
-  await replyStore.getActivity(replyId.value)
-})
-
-</script>
-
 <template>
   <section aria-labelledby="timeline-title" class="lg:col-span-1 lg:col-start-3">
-    <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
-      <h2 id="timeline-title" class="text-lg font-medium text-gray-900">Timeline</h2>
+    <div class="bg-white border px-4 pb-4 pt-3 shadow rounded-lg">
+      <h2 id="timeline-title" class="text-xl font-bold">
+        История
+      </h2>
 
       <!-- Activity Feed -->
       <div class="mt-6 flow-root">
         <ul role="list" class="-mb-8">
-          <li v-for="(item, itemIdx) in timeline" :key="item.id">
+          <li v-for="(item, itemIdx) in timeline" :key="itemIdx">
             <div class="relative pb-8">
                     <span v-if="itemIdx !== timeline.length - 1"
                           class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
-              <div class="relative flex space-x-3">
+              <div class="relative items-center flex space-x-3">
                 <div>
-                        <span
-                          :class="[item.type.bgColorClass, 'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white']">
-                          <component :is="item.type.icon" class="h-5 w-5 text-white" aria-hidden="true" />
-                        </span>
+                  <span
+                    v-if="item?.target?.key === 'DECLINED'"
+                    class="bg-red-500 flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
+                  >
+                    <XMarkIcon class="h-5 w-5 text-white" />
+                  </span>
+                  <span
+                    v-else-if="item?.target?.key === 'OFFER_POSTED' || item?.target?.key === 'OFFER_ACCEPTED' || item?.target?.key === 'DONE'"
+                    class="bg-green-500 flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
+                  >
+                    <CheckIcon class="h-5 w-5 text-white" />
+                  </span>
+                  <span
+                    v-else
+                    :class="[item.type.bgColorClass, 'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white']">
+                    <component :is="item.type.icon" class="h-5 w-5 text-white" aria-hidden="true" />
+                  </span>
                 </div>
-                <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                <div class="flex min-w-0 flex-1 justify-between space-x-4">
                   <div>
                     <p class="text-sm text-gray-500">
-                      {{ item.content }} <a href="#" class="font-medium text-gray-900">{{ item.target }}</a>
+                      {{ item.text }} <span v-if="item?.target?.value" class="font-medium text-gray-900">{{ item.target.value }}</span>
                     </p>
+                    <span
+                      v-if="item?.target?.key === 'DECLINED'"
+                      class="text-sm font-medium text-gray-900"
+                    >
+                      {{replyStore?.currentReply?.reason || ''}}
+                    </span>
                   </div>
-                  <div class="whitespace-nowrap text-right text-sm text-gray-500">
-                    <time :datetime="item.datetime">{{ item.date }}</time>
+                  <div class="whitespace-nowrap flex items-center text-right text-sm text-gray-500">
+                    {{ formattedDate ? formattedDate(item.createdAt) : '' }}
                   </div>
                 </div>
               </div>
@@ -117,16 +53,61 @@ onMounted(async() => {
           </li>
         </ul>
       </div>
-      <div class="mt-6 flex flex-col justify-stretch">
-        <button type="button"
-                class="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          Advance to offer
-        </button>
-      </div>
     </div>
   </section>
 </template>
 
-<style scoped>
+<script setup>
+import { CheckIcon, HandThumbUpIcon, UserIcon, XMarkIcon } from '@heroicons/vue/20/solid/index.js'
+import {computed} from "vue";
+import { REPLY_STATUS_COLOR } from '@/shared/constants.js'
+import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
+import { useReplyStore } from '@/app/store/modules/reply.js'
 
-</style>
+const props = defineProps({
+  userReplyActivity: {type: Array, default: () => []}
+})
+
+const replyStore = useReplyStore()
+const directoriesStore = useDictionaryStore()
+
+
+const replyStatusList = computed(() => {
+  return directoriesStore?.replyStatusList?.map((item) => ({
+    ...item,
+    ...REPLY_STATUS_COLOR[item?.key] || null,
+  })) || [];
+});
+
+
+const formattedDate = (date) => {
+  const dateRes = new Date(date);
+  const day = String(dateRes.getDate()).padStart(2, "0");
+  const month = String(dateRes.getMonth() + 1).padStart(2, "0");
+  return `${day}.${month}`;
+};
+
+
+const timeline = computed(() => {
+  const resDefault = [{
+    id: 1,
+    type: eventTypes.applied,
+    text: 'Отклик успешно создан',
+    createdAt: '2024-06-16T14:15:19.072808Z',
+  }]
+  const resActivity = props?.userReplyActivity?.map((item) => ({
+    ...item,
+    text: item?.type === 'REPLY_STATUS' ? `Изменен статус на` : (item?.text || ''),
+    target: replyStatusList?.value?.find((e) => e.key === item?.text) || '',
+    type: item?.type === 'REPLY_STATUS' ? eventTypes.advanced : eventTypes.advanced,
+  })) || []
+  return resDefault.concat(resActivity || [])
+})
+
+const eventTypes = {
+  applied: { icon: UserIcon, bgColorClass: 'bg-gray-400' },
+  advanced: { icon: HandThumbUpIcon, bgColorClass: 'bg-blue-500' },
+  completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' },
+  error: { icon: XMarkIcon, bgColorClass: 'bg-red-500' }
+}
+</script>
