@@ -71,7 +71,7 @@ const changeOpen = (e) => {
       <div v-if="open" data-popover id="popover-description" role="tooltip" class="absolute bottom-11 -right-12 z-10 inline-block text-sm text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
 
         <div class="p-3 space-y-2">
-          <h3 class="font-semibold text-gray-900 dark:text-white">Показатель навыков </h3>
+          <h3 class="font-semibold text-gray-900 dark:text-white">Соответствие навыков </h3>
           <p v-if="missedList?.length">Отсутствуют:
             <span v-for="(item, index) in missedList" :key="item.key" class="mr-0.5">
             {{item?.name || ''}}

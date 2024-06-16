@@ -47,9 +47,7 @@
         <div class="space-y-6 lg:col-span-2 lg:col-start-1">
           <!-- Description list-->
 
-        <ApplicantView
-          :applicant="applicant"
-        />
+        <ApplicantView />
           <div>
             <div class="sm:hidden">
               <label for="tabs" class="sr-only">Select a tab</label>
@@ -164,7 +162,6 @@ const getNextStatus = () => {
 }
 
 const onChangeStatus = (e) => {
-console.log(e)
 }
 
 onMounted(async() => {

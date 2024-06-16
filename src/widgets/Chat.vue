@@ -173,7 +173,6 @@ onMounted(async () => {
 })
 
 const loadHistory = async () => {
-  console.log('replyStore?.currentReply?.chatId', replyStore?.currentReply?.chatId)
   if(replyStore?.currentReply?.chatId) {
     isLoading.value = true
     await chatStore.fillChatHistory(replyStore?.currentReply?.chatId).finally(() => {

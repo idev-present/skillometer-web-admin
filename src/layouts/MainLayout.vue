@@ -157,7 +157,7 @@
 
 
       <main class="py-10">
-        <div class="px-4 sm:px-6 lg:px-8">
+        <div v-if="!dictionaryStore.isLoading" class="px-4 sm:px-6 lg:px-8">
           <RouterView />
         </div>
       </main>
@@ -208,6 +208,7 @@ const userNavigation = [
 
 const sidebarOpen = ref(false)
 const isLoading = ref(false)
+const isLoaded = ref(false)
 
 const route = useRoute()
 
@@ -250,18 +251,13 @@ const getProfile = async () => {
 
 
 onMounted(async () => {
- await getProfile()
-  const arr = [
-    dictionaryStore.fillReplyStatusList(),
-    dictionaryStore.fillCurrencyList(),
-    dictionaryStore.fillCityList(),
-    dictionaryStore.fillEmploymentTypeList(),
-    dictionaryStore.fillDivisionList(),
-    dictionaryStore.fillQualificationList(),
-    dictionaryStore.fillSkillList(),
-    dictionaryStore.fillSearchStatusList(),
-  ]
-  await Promise.all(arr)
+  await dictionaryStore.getAllDictionaries()
+    .finally(() => {
+      getProfile()
+    })
+
+
+
 })
 
 </script>

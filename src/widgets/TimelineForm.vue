@@ -1,10 +1,17 @@
 <script setup>
-import { CheckIcon, HandThumbUpIcon, UserIcon } from '@heroicons/vue/20/solid/index.js'
+import { CheckIcon, HandThumbUpIcon, UserIcon, XMarkIcon } from '@heroicons/vue/20/solid/index.js'
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useReplyStore } from '@/app/store/modules/reply.js'
+
+const route = useRoute()
+const replyStore = useReplyStore()
 
 const eventTypes = {
   applied: { icon: UserIcon, bgColorClass: 'bg-gray-400' },
   advanced: { icon: HandThumbUpIcon, bgColorClass: 'bg-blue-500' },
-  completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' }
+  completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' },
+  decline: { icon: XMarkIcon(), bgColorClass: 'bg-red-500' },
 }
 
 const timeline = [
@@ -47,8 +54,33 @@ const timeline = [
     target: 'Katherine Snyder',
     date: 'Oct 4',
     datetime: '2020-10-04'
+  },
+  {
+    id: 5,
+    type: eventTypes.decline,
+    content: 'Completed interview with',
+    target: 'Katherine Snyder',
+    date: 'Oct 4',
+    datetime: '2020-10-04'
   }
 ]
+
+const replyId = computed(() => {
+  return route?.params?.id
+})
+
+const activityList = computed(() => {
+  return replyStore.activityList || []
+})
+
+onMounted(async() => {
+  if(!replyId.value) {
+    console.error('reply id is not define')
+    return
+  }
+  await replyStore.getActivity(replyId.value)
+})
+
 </script>
 
 <template>

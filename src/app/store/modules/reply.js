@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { useToast } from 'vue-toastification'
 import ApiService from '@/shared/services/api.service.js'
 import { camelize } from '@/shared/utils/keyConverter.js'
-import { applicantBuilder } from '@/shared/utils/applicationBuilder.js'
 import { replyBuilder } from '@/shared/utils/replyBuilder.js'
 import { statusDescriptions } from '@/shared/constants.js'
 
@@ -20,7 +19,8 @@ export const useReplyStore = defineStore({
       isLoading: false,
       availableStatuses: [],
       comments: [],
-      replyCounts: []
+      replyCounts: [],
+      activityList: [],
     }
   },
   actions: {
@@ -167,5 +167,25 @@ export const useReplyStore = defineStore({
           })
       })
     },
+    getActivity(id) {
+      return new Promise((resolve, reject) => {
+        this.isLoading = true
+        ApiService
+          .get(`/reply/${id}/activity`)
+          .then((res) => {
+            const data = res ? camelize(res) : []
+            this.activityList = data
+            resolve(data)
+          })
+          .catch((err) => {
+            console.error(err)
+            toast.error(err?.message || "Ошибка загрузки истории отклика! Пожалуйста, попробуйте позже")
+            reject()
+          })
+          .finally(() => {
+            this.isLoading = false
+          })
+      })
+    }
   },
 })

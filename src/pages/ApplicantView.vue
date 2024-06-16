@@ -1,32 +1,22 @@
 <script setup>
+import { computed } from 'vue'
+import { useApplicantStore } from '@/app/store/modules/applicant.js'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 
-import { PaperClipIcon } from '@heroicons/vue/20/solid/index.js'
-import { ref } from 'vue'
 
-const attachments = [
-  { name: 'resume_front_end_developer.pdf', href: '#' },
-  { name: 'coverletter_front_end_developer.pdf', href: '#' }
-]
 
-const isFull = ref(false)
+const applicantStore = useApplicantStore()
 
-const changeViewMode = () => {
-  isFull.value = !isFull.value
-}
 
-const props = defineProps({
-  applicant: {
-    type: Object,
-    default: () => ({}),
-  },
-
+const applicant = computed(() => {
+  return applicantStore.currentApplicant
 })
 
 </script>
 
 <template>
   <section aria-labelledby="applicant-information-title">
-    <div class="bg-white shadow sm:rounded-lg">
+    <div v-if="!applicantStore.isLoading" class="bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 sm:px-6">
         <div class="flex justify-between">
           <h2 id="applicant-information-title" class="text-lg font-medium leading-6 text-gray-900">Информация о
@@ -34,8 +24,6 @@ const props = defineProps({
           <span v-if="applicant?.lastVisited" class="mt-1 max-w-2xl text-xs text-gray-500">Последний визит {{applicant?.lastVisited}}</span>
         </div>
         <span class="mt-1 max-w-2xl text-sm text-gray-500">Личные данные</span>
-
-
 
       </div>
       <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -108,6 +96,7 @@ const props = defineProps({
         </a>
       </div>
     </div>
+    <LoadingIndicator v-else/>
   </section>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form v-if="!vacancyStore.isLoading">
     <div class="space-y-12">
       <div class="border-b border-gray-900/10 pb-12">
         <h2 class="text-base font-semibold leading-7 text-gray-900">{{ title }}</h2>
@@ -142,7 +142,6 @@
         </div>
       </div>
     </div>
-
     <div class="mt-6 flex items-center justify-end gap-x-6">
       <button type="button" class="text-sm font-semibold leading-6 text-gray-900"
               @click.prevent="back"
@@ -158,6 +157,7 @@
       </button>
     </div>
   </form>
+  <LoadingIndicator v-else/>
 </template>
 
 <script setup>
@@ -173,6 +173,7 @@ import BaseContentEditor from '@/shared/BaseContentEditor.vue'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { decamelize } from '@/shared/utils/keyConverter.js'
 import VacancyForm from '@/app/forms/VacancyForm.js'
+import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 
 
 const vacancyStore = useVacancyStore()
