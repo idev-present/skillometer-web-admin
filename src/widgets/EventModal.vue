@@ -124,7 +124,7 @@ import BaseTextarea from '@/shared/BaseTextarea.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import BaseSelect from '@/shared/BaseSelect.vue'
 import { useEventStore } from '@/app/store/modules/event.js'
-import { dateWithoutTimezone, dateWithTimezone } from '@/shared/utils/date.js'
+import { dateWithoutTimezone } from '@/shared/utils/date.js'
 
 const eventTypes = [
   { key:'ZOOM', value: 'Zoom' },

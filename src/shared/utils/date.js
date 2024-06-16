@@ -15,8 +15,7 @@ export const dateWithTimezone = (date) => {
 }
 
 
-export const getDateTimeStringFromDate = (date, timeIsStartOrEndOfDay) => {
-  const rightDate = dateWithoutTimezone(date)
+export const getDateTimeStringFromDate = (rightDate, timeIsStartOrEndOfDay) => {
   const y = rightDate.getFullYear();
   const m = rightDate.getMonth() + 1;
   const d = rightDate.getDate();

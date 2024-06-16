@@ -52,7 +52,7 @@ const config = {
     },
   },
   dayBoundaries: {
-    start: 8,// integer between 0 and 24
+    start: 6,// integer between 0 and 24
     end: 20// integer between 0 and 24
   },
 }
