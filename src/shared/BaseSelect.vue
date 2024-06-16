@@ -22,7 +22,7 @@
           <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             <ListboxOption as="template" v-for="item in items" :key="item.key" :value="item" v-slot="{ active, selected }">
               <li :class="[active ? 'bg-indigo-600 text-white' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">
-                <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ item.key }}</span>
+                <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ item.value }}</span>
 
                 <span v-if="selected" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />
@@ -54,7 +54,7 @@ import { computed } from 'vue'
 const emit = defineEmits(['update:modelValue', 'onFocus'])
 
 const computedValue = computed(() => {
-  return props.modelValue?.key || ''
+  return props.modelValue?.value || ''
 })
 
 

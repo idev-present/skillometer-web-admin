@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { useReplyStore } from '@/app/store/modules/reply.js'
 import { useUserStore } from '@/app/store/modules/user.js'
 import UserAvatar from '@/app/assets/icons/SVG/UserAvatar.vue'
+import EmptyState from '@/shared/EmptyState.vue'
 
 
 const props = defineProps({
@@ -50,7 +51,7 @@ const onSend = (e) => {
           <h2 id="notes-title" class="text-lg font-medium text-gray-900">Комментарии</h2>
         </div>
         <div class="px-4 py-6 sm:px-6">
-          <ul role="list" class="space-y-8">
+          <ul v-if="comments?.length" role="list" class="space-y-8">
             <li v-for="comment in comments" :key="comment.id">
               <div class="flex space-x-3">
                 <div class="flex-shrink-0">
@@ -72,6 +73,10 @@ const onSend = (e) => {
               </div>
             </li>
           </ul>
+          <EmptyState
+            v-else
+            title="Комментарии еще не добавляли"
+          />
         </div>
       </div>
       <div class="bg-gray-50 px-4 py-6 sm:px-6">

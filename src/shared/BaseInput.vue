@@ -45,7 +45,7 @@
         >
         </div>
       </div>
-      <small v-if="message" class="control__message">
+      <small v-if="message" class="mt-2 text-sm text-red-600">
         {{ message?.text || message }}
       </small>
     </div>

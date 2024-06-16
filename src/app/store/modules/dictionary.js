@@ -44,8 +44,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             const preparedData = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.fias_id
+              key: item.fias_id,
+              value: item.name
             })) || []
             this.cityList = camelize(preparedData)
           })
@@ -65,8 +65,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             this.employmentTypeList = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.id
+              key: item.id,
+              value: item.name
             })) || []
           })
           .catch((err) => {
@@ -85,8 +85,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             this.divisionList = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.id
+              key: item.id,
+              value: item.name
             })) || []
           })
           .catch((err) => {
@@ -105,8 +105,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             this.qualificationList = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.id
+              key: item.id,
+              value: item.name
             })) || []
           })
           .catch((err) => {
@@ -125,8 +125,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             this.skillList = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.id
+              key: item.id,
+              value: item.name
             })) || []
           })
           .catch((err) => {
@@ -145,8 +145,8 @@ export const useDictionaryStore = defineStore({
             const data = res || []
             this.searchStatusList = data.map((item) => ({
               ...item,
-              key: item.name,
-              value: item.id
+              key: item.id,
+              value: item.name
             })) || []
           })
           .catch((err) => {

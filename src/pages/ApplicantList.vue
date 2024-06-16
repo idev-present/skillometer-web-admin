@@ -10,7 +10,7 @@
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-300">
+            <table v-if="applicants?.length" class="min-w-full divide-y divide-gray-300">
               <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Имя</th>
@@ -54,6 +54,10 @@
               </tr>
               </tbody>
             </table>
+            <EmptyState
+            v-else
+            title="База резюме пока пустая"
+            />
           </div>
         </div>
       </div>
@@ -78,6 +82,7 @@ import ConfirmModal from '@/shared/ConfirmModal.vue'
 import { useApplicantStore } from '@/app/store/modules/applicant.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import { useRouter } from 'vue-router'
+import EmptyState from '@/shared/EmptyState.vue'
 
 const isLoading = ref(false)
 const applicants = ref(false)

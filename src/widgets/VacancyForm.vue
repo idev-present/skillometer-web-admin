@@ -256,7 +256,7 @@ const payloadBuilder = () => {
     description: description.value,
     team: team.value,
     todo: todo.value,
-    cityId: city.value?.value,
+    cityId: city.value?.key,
     employmentTypeId: employmentType.value?.id,
     divisionId: division.value?.id,
     qualificationId: qualification.value?.id,

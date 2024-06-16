@@ -195,6 +195,7 @@
               :email="reply.applicantEmail"
               :status="reply.status"
               :appliedDatetime="reply.updatedAt"
+              :matchingResult="reply?.matchingResult"
             />
           </li>
         </ul>
@@ -203,9 +204,6 @@
           title="Отклики не найдены"
           description="В данный момент нет откликов с данным статусом"
         />
-
-        <!-- Pagination -->
-        <Pagination />
       </div>
     </main>
     <LoadingIndicator :visible="loading" />
@@ -237,7 +235,6 @@ import {
   PencilIcon
 } from '@heroicons/vue/20/solid'
 import ReplyListItem from '@/shared/ReplyListItem.vue'
-import Pagination from '@/shared/Pagination.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { useReplyStore } from '@/app/store/modules/reply.js'

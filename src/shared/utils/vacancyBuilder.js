@@ -19,8 +19,8 @@ export const vacancyBuilder = (vac) => {
     ...vac,
     city: {
       ...city,
-      key: city?.name,
-      value: city?.fiasId
+      key: city?.fiasId,
+      value: city?.name
     },
     employmentType: employmentTypeList.find((item) => item?.id === vac?.employmentTypeId),
     division: divisionList.find((item) => item?.id === vac?.divisionId),

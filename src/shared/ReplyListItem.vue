@@ -5,6 +5,7 @@ import { getLocalDate, getLocalDateTime } from './utils/getLocalDate.js'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { computed } from 'vue'
 import UserAvatar from '@/app/assets/icons/SVG/UserAvatar.vue'
+import SkillAssessment from '@/widgets/SkillAssessment.vue'
 
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -35,6 +36,10 @@ const props = defineProps({
   id: {
     type: String,
     default: () => ""
+  },
+  matchingResult: {
+    type: Object,
+    default: () => ({})
   },
 })
 
@@ -87,10 +92,19 @@ const colorByStatus = computed(() => {
               </p>
             </div>
           </div>
+          <div class="hidden md:block">
+          </div>
         </div>
       </div>
       <div>
-          <ChevronRightIcon class="h-5 w-5 text-gray-400 group-hover:text-gray-700" aria-hidden="true" />
+        <SkillAssessment
+          :additional-skills="matchingResult?.additionalSkills || []"
+          :missed-skills="matchingResult?.missedSkills || []"
+          :coverage="matchingResult?.coverage || 0"
+        />
+      </div>
+      <div>
+          <ChevronRightIcon class="h-5 w-5 text-gray-400 group-hover:text-gray-700 ml-10" aria-hidden="true" />
       </div>
     </div>
   </RouterLink>
