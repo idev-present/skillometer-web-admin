@@ -23,9 +23,7 @@ const config = {
     // This option is not compatible with the 'dayBoundaries'-option, and will simply be ignored if custom day boundaries are set.
     scrollToHour: 1,
   },
-  dayIntervals: {
-    length: 30
-  },
+
   month: {
     // Hide leading and trailing dates in the month view (defaults to true when not set)
     showTrailingAndLeadingDates: false,
