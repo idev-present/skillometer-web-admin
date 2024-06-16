@@ -34,46 +34,58 @@
               v-model="name"
             />
           </div>
-
           <div class="flex py-4">
             <div class="mr-2">
               <span class="block text-sm font-medium leading-6 text-gray-900">
                 Начало
               </span>
               <VueDatePicker
-                label="Начало"
-                v-model="dateFrom"
-                format="MM/dd/yyyy HH:mm"
+                v-model="startAt"
+                format="dd.MM.yyyy HH:mm"
                 auto-apply
                 locale="ru-RU"
+                text-input
               />
+              <span class="block text-sm font-medium leading-6 text-red-900">
+                {{isDateValid}}
+              </span>
             </div>
             <div class="mr-2">
               <span class="block text-sm font-medium leading-6 text-gray-900">
-                Начало
+                Окончание
               </span>
               <VueDatePicker
-                label="Окончание"
-                v-model="dateTo"
-                format="MM/dd/yyyy HH:mm"
+                v-model="endAt"
+                format="dd.MM.yyyy HH:mm"
                 auto-apply
                 locale="ru-RU"
+                text-input
               />
             </div>
           </div>
+          <BaseSelect
+            label="Тип"
+            :items="eventTypes"
+            v-model="type"
+          />
+          <div class="py-6">
+            <BaseInput
+              v-model="payload"
+              label="Адрес/телефон"
+            />
+          </div>
+          <BaseSelect
+            label="Статус"
+            :items="eventStatuses"
+            v-model="status"
+          />
           <div class="py-4">
             <BaseTextarea
-              label="Комменатрий"
-              v-model="comment"
+              :key="description"
+              label="Описание"
+              v-model="description"
             />
           </div>
-          <div class="py-4">
-            <BaseInput
-              v-model="link"
-              label="Ссылка"
-            />
-          </div>
-
 
         </div>
         <div class="modal-footer px-8 pt-4">
@@ -93,6 +105,7 @@
               rounded
               @onClick="onConfirm"
               @onKeyUpEnter="onConfirm"
+              :disabled="isDisabled || !!isDateValid"
             />
           </div>
         </div>
@@ -103,15 +116,35 @@
 
 <script setup>
 // icons
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BaseButton from '@/shared/BaseButton.vue'
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import BaseInput from '@/shared/BaseInput.vue'
 import BaseTextarea from '@/shared/BaseTextarea.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
+import BaseSelect from '@/shared/BaseSelect.vue'
+import { useEventStore } from '@/app/store/modules/event.js'
+import { dateWithoutTimezone, dateWithTimezone } from '@/shared/utils/date.js'
 
+const eventTypes = [
+  { key:'ZOOM', value: 'Zoom' },
+  { key:'GOOGLE_MEET', value: 'Google Meet' },
+  { key:'TELEGRAM', value: 'Telegram' },
+  { key:'PHONE', value: 'Телефонный звонок' }
+]
+const eventStatuses = [
+  { key:'PLANNING', value: 'Планирование' },
+  { key:'CONFIRMED', value: 'Подтверждение' },
+  { key:'WAITING', value: 'Ожидание' },
+  { key:'DONE', value: 'Выполнено' }
+]
+const eventStore = useEventStore()
 
 const props = defineProps({
+  id: {
+    type: String,
+    default:'',
+  },
   persistent: {
     type: Boolean,
     default: true
@@ -137,10 +170,12 @@ const props = defineProps({
 const emit = defineEmits(['close', 'onConfirm'])
 
 const name = ref('')
-const dateFrom = ref()
-const dateTo = ref()
-const comment = ref('')
-const link = ref('')
+const type = ref(null)
+const startAt = ref()
+const endAt = ref()
+const description = ref('')
+const payload = ref('')
+const status = ref(null)
 
 
 //* hooks
@@ -150,6 +185,27 @@ onMounted(() => {
       this.close()
     }
   })
+})
+
+const isDisabled = computed(() => {
+  const data = {
+    name: name.value,
+    type: type.value?.key,
+    startAt: startAt.value,
+    endAt: endAt.value,
+    payload: payload.value,
+  }
+  console.log('Object.values(data)', Object.values(data))
+  return Object.values(data).some((e) => !e)
+})
+
+const isDateValid = computed(() => {
+  if(startAt.value && endAt.value) {
+    if(new Date(startAt.value) > new Date(endAt.value)) {
+      return 'Дата начала не должна быть позже даты окночания'
+    }
+  }
+  return ''
 })
 
 //* methods
@@ -163,8 +219,41 @@ const close = () => {
   emit('close', false)
 }
 const onConfirm = () => {
-  emit('onConfirm')
+  const data = {
+    name: name.value,
+    type: type.value?.key,
+    start_at: startAt.value,
+    end_at: endAt.value,
+    description: description.value,
+    payload: payload.value,
+    status: status.value?.key
+  }
+  emit('onConfirm', data)
 }
+
+const currentId = computed(() => {
+  return eventStore?.currentEvent?.id
+})
+
+
+onMounted(async () => {
+  console.log('props.id', props.id)
+  await eventStore.getEvent(props.id)
+    .finally(() => {
+      console.log('------eventStore?.currentEvent', eventStore?.currentEvent)
+      name.value = eventStore?.currentEvent?.name
+      type.value = eventTypes.find((el) => el.key === eventStore?.currentEvent?.type)
+      startAt.value = new Date(eventStore?.currentEvent?.startAt)
+      endAt.value = new Date(eventStore?.currentEvent?.endAt)
+      description.value = eventStore?.currentEvent?.description
+      payload.value = eventStore?.currentEvent?.payload
+      status.value = eventStatuses.find((el) => el.key === eventStore?.currentEvent?.status)
+    })
+
+})
+
+
+
 </script>
 
 <style lang="scss" scoped>
