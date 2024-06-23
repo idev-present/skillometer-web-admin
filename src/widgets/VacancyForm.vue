@@ -5,7 +5,20 @@
         <h2 class="text-base font-semibold leading-7 text-gray-900">{{ title }}</h2>
         <p class="mt-1 text-sm leading-6 text-gray-600">Эта информация будет отображаться публично, поэтому будьте осторожны с тем, чем делитесь.</p>
 
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+        <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+          <div class="col-span-4 rounded-md bg-blue-50 p-2">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <InformationCircleIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
+              </div>
+              <div class="ml-2 flex-1 md:flex md:justify-between">
+                <p class="text-sm text-blue-700">
+                  Описания вакансий объемом более 500 слов с подробными задачами, обязанностями и требованиями к кандидатам привлекают больше заявок
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div class="col-span-4">
             <BaseInput
               :message="errors?.name"
@@ -254,7 +267,7 @@ import VacancyForm from '@/app/forms/VacancyForm.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css"
-import { SparklesIcon } from '@heroicons/vue/24/outline'
+import { SparklesIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
 
 
 const vacancyStore = useVacancyStore()
