@@ -70,7 +70,7 @@ const colorByStatus = computed(() => {
 <!--          <img class="h-12 w-12 rounded-full group-hover:opacity-75" :src="imageUrl" alt="" />-->
           <UserAvatar classes="h-12 w-12 rounded-full group-hover:opacity-75 text-gray-400"/>
         </div>
-        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4 ">
+        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-x-4">
           <div>
             <p class="truncate text-sm font-medium text-purple-600">{{ name }}</p>
             <p class="mt-2 flex items-center text-sm text-gray-500">
@@ -85,6 +85,9 @@ const colorByStatus = computed(() => {
                 {{ ' ' }}
                 <span>{{ getLocalDateTime(appliedDatetime)  }}</span>
               </p>
+              <div v-if="props?.id === 'c8545042-8815-484d-8c52-c7cda414b37a'" class="mt-2 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                Отклик с HeadHunter
+              </div>
               <p class="mt-2 flex items-center text-sm text-gray-500">
                 <XCircleIcon v-if="status === 'DECLINED'" class="mr-1.5 h-5 w-5 flex-shrink-0 text-red-600" aria-hidden="true" />
                 <CheckCircleIcon v-else class="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400" aria-hidden="true" />
@@ -96,7 +99,7 @@ const colorByStatus = computed(() => {
           </div>
         </div>
       </div>
-      <div>
+      <div class="flex items-center text-sm">
         <SkillAssessment
           :additional-skills="matchingResult?.additionalSkills || []"
           :missed-skills="matchingResult?.missedSkills || []"
