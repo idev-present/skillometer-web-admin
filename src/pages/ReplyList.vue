@@ -12,22 +12,29 @@
           <div class="sm:hidden">
             <select id="tabs" name="tabs"
                     class="mt-4 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-500">
-              <option v-for="tab in dictionaryStore.replyStatusList" :key="tab.key" :selected="tab.current">{{ tab.value }}</option>
+              <option v-for="tab in dictionaryStore.replyStatusList" :key="tab.key" :selected="tab.current">
+                {{ tab.value }}
+              </option>
             </select>
           </div>
           <div class="sm:block">
             <div class="border-b border-gray-200">
               <nav
-                class="-mb-px mt-2 flex space-x-8 cursor-pointer overflow-y-auto" aria-label="Tabs">
+                class="-mb-px mt-2 flex space-x-6 cursor-pointer overflow-y-auto" aria-label="Tabs">
                 <div
                   v-for="tab in tabs"
                   :key="tab.key"
-                  :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap px-1 py-4 text-sm font-medium']"
+                  :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' :
+                  'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700',
+                  'whitespace-nowrap relative mb-1 inline-flex items-center rounded-md bg-gray-50 pr-3 pl-5 py-2 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10']"
                   @click="onTabClick(tab)"
                 >
+                  <div class="w-2 h-full absolute left-0 rounded-l-md" :class="REPLY_STATUS_COLOR[tab.key]?.bgIndicator">
+                  </div>
                   {{ tab.value }}
                   <span v-if="tab.count"
-                        :class="[tab.key === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count }}
+                        :class="[tab.key === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900',
+                        'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count }}
                   </span>
                 </div>
               </nav>
@@ -67,6 +74,7 @@ import EmptyState from '@/shared/EmptyState.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { REPLY_STATUS_COLOR } from '@/shared/constants.js'
 
 const isLoading = ref(false)
 
@@ -114,6 +122,26 @@ onMounted(async () => {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
+.tabs {
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #98939a #ffffff;
+  }
 
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #98939a;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
+}
 </style>

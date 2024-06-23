@@ -167,13 +167,17 @@
             <div class="border-b border-gray-200">
 
                   <nav
-                    class="-mb-px mt-2 flex space-x-8 cursor-pointer overflow-y-auto" aria-label="Tabs">
+                    class="-mb-px mt-2 flex space-x-6 cursor-pointer overflow-y-auto" aria-label="Tabs">
                     <div
                       v-for="tab in tabs"
                       :key="tab.key"
-                      :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700', 'whitespace-nowrap px-1 py-4 text-sm font-medium']"
+                      :class="[tab.key === currentTab  ? 'border-purple-500 text-purple-600' :
+                        'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700',
+                        'whitespace-nowrap relative mb-1 inline-flex items-center rounded-md bg-gray-50 pr-3 pl-5 py-2 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10']"
                       @click="onTabClick(tab)"
                     >
+                      <div class="w-2 h-full absolute left-0 rounded-l-md" :class="REPLY_STATUS_COLOR[tab.key]?.bgIndicator">
+                      </div>
                       {{ tab.value }}
                       <span v-if="tab.count"
                             :class="[tab.key === currentTab ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-900', 'ml-2 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block']">{{ tab.count
@@ -243,6 +247,7 @@ import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import { register } from 'swiper/element/bundle'
 import BaseBreadcrumbs from '@/shared/BaseBreadcrumbs.vue'
 import EmptyState from '@/shared/EmptyState.vue'
+import { REPLY_STATUS_COLOR } from '@/shared/constants.js'
 
 register()
 const route = useRoute()
