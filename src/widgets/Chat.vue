@@ -36,6 +36,7 @@
              :class="item?.operator === false && 'justify-end'"
         >
           <div
+              v-if="item?.content"
               class="bg-[#F2F4F8] text-gray-900 px-3 py-2 rounded-r-lg rounded-bl-lg shadow text-sm max-w-xs"
               :class="[(!item?.operator && 'message-me')]"
           >
