@@ -81,7 +81,6 @@
           />
           <div class="py-4">
             <BaseTextarea
-              :key="description"
               label="Описание"
               v-model="description"
             />

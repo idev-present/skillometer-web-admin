@@ -9,9 +9,15 @@ const route = useRoute()
 const breadcrumbs = computed(() => {
   const id = route?.params?.id
   const name = route?.params?.operation === 'edit' ? 'Редактирование вакансии' : "Создание вакансии"
+  if(route?.params?.operation === 'edit') {
+    return [
+      { name: 'Список вакансий', href: '/vacancies', current: false },
+      { name: 'К вакансии', href: `/vacancies/view/${id}`, current: false },
+      { name: `${name}`, disabled: true}
+    ]
+  }
   return [
     { name: 'Список вакансий', href: '/vacancies', current: false },
-    { name: 'К вакансии', href: `/vacancies/view/${id}`, current: false },
     { name: `${name}`, disabled: true}
   ]
 })
