@@ -11,7 +11,85 @@
         </button>
       </RouterLink>
     </div>
-    <div v-if="vacancies?.length" class="mt-8 flow-root">
+    <div class="flex flex-col lg:flex-row w-full gap-6 justify-between">
+      <div class="mt-8 pointer-events-auto w-full rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5">
+        <div class="p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <ArrowDownOnSquareIcon class="h-6 w-6 text-blue-600" aria-hidden="true" />
+            </div>
+            <div class="ml-3 w-0 flex-1 pt-0.5">
+              <p class="text-sm font-medium text-gray-900">Автозаполнение вакансий</p>
+              <p class="mt-1 text-sm text-gray-500">
+                У вас уже есть вакансии? Загрузите их, чтобы форма заполнилась автоматически
+              </p>
+            </div>
+            <div class="ml-3 mt-auto mb-auto flex flex-shrink-0">
+              <Menu as="div" class="relative inline-block text-left">
+                <div>
+                  <MenuButton class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Импорт
+                    <ChevronDownIcon class="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  </MenuButton>
+                </div>
+
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95">
+                  <MenuItems class="absolute right-0 z-40 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div class="py-1">
+                      <MenuItem v-slot="{ active }">
+                        <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'group flex items-center px-4 py-2 text-sm']">
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/7/79/HeadHunter_logo.png"
+                            alt="hh-icon"
+                            class="mr-3 h-5 w-5"
+                          />
+                          HeadHunter
+                        </a>
+                      </MenuItem>
+                      <MenuItem v-slot="{ active }">
+                        <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'group flex items-center px-4 py-2 text-sm']">
+                          <img
+                            src="https://amonitoring.ru/upload/iblock/57f/57f6eb229b4c06aa42ab2e8b2a279d7a.svg"
+                            alt="habr-icon"
+                            class="mr-3 h-5 w-5"
+                          />
+                          Хабр
+                        </a>
+                      </MenuItem>
+                    </div>
+                  </MenuItems>
+                </transition>
+              </Menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:mt-8 pointer-events-auto w-full rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5">
+        <div class="p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <ArchiveBoxArrowDownIcon class="h-6 w-6 text-blue-600" aria-hidden="true" />
+            </div>
+            <div class="ml-3 w-0 flex-1 pt-0.5">
+              <p class="text-sm font-medium text-gray-900">Импортировать шаблон</p>
+              <p class="mt-1 text-sm text-gray-500">Используйте множество готовых и специально созданных шаблонов</p>
+            </div>
+            <div class="ml-4 mt-auto mb-auto flex flex-shrink-0">
+              <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                Выбрать шаблон
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="vacancies?.length" class="mt-6 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -110,8 +188,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { useVacancyStore } from '@/app/store/modules/vacancy.js'
-import { TrashIcon, PencilIcon, EyeIcon } from '@heroicons/vue/20/solid'
+import { TrashIcon, PencilIcon, EyeIcon, ChevronDownIcon,} from '@heroicons/vue/20/solid'
+import { ArrowDownOnSquareIcon, ArchiveBoxArrowDownIcon } from '@heroicons/vue/24/outline'
 import ConfirmModal from '@/shared/ConfirmModal.vue'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import EmptyState from '@/shared/EmptyState.vue'
