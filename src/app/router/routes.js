@@ -72,6 +72,14 @@ const routes = [
         },
   },
   {
+    path: '/reply',
+    name: 'ReplyList',
+    component: () => import('@/pages/ReplyList.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     name: 'AuthCallback',
     path: import.meta.env.VITE_IAM_REDIRECT_URI,
     component: () => import('@/pages/AuthCallback.vue'),

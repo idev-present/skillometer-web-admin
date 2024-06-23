@@ -185,7 +185,8 @@ import {
   FolderIcon,
   HomeIcon,
   XMarkIcon,
-  ArrowLeftEndOnRectangleIcon
+  ArrowLeftEndOnRectangleIcon,
+  ChatBubbleBottomCenterTextIcon
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
@@ -194,6 +195,7 @@ import iamService from '@/shared/services/iam.service.js'
 
 const navigation = [
   { name: 'Вакансии', href: '/vacancies', icon: HomeIcon, current: true },
+  { name: 'Отклики', href: '/reply', icon: ChatBubbleBottomCenterTextIcon, current: true },
   { name: 'База резюме', href: '/applicants', icon: FolderIcon, current: false },
   { name: 'Планирование', href: '/schedule', icon: CalendarIcon, current: false },
 ]
