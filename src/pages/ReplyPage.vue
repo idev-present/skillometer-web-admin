@@ -163,7 +163,7 @@ const getNextStatus = () => {
   replyStore.getReplyNextStatusFlow(replyId.value)
 }
 
-const onChangeStatus = (e) => {
+const onChangeStatus = () => {
 }
 
 onMounted(async() => {

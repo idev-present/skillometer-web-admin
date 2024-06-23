@@ -117,6 +117,7 @@ const sendStatus = (payload) => {
               isDecline.value = false
             }
           })
+      replyStore.getActivity(props.id)
     })
 }
 
