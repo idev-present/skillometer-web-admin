@@ -15,13 +15,20 @@
             />
           </div>
           <div class="col-span-4">
-            <BaseTextarea
-              v-model="description"
-              :status="errors?.description ? 'error' : 'info'"
-              :message="errors?.description"
-              label="Описание вакансии"
-              @on-focus="clearError('description')"
-            />
+            <div class="w-full relative">
+              <label
+                class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Описание вакансии
+              </label>
+              <textarea
+                v-model="description"
+                class="h-20 shadow-sm block w-full focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none sm:text-sm border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+            <p v-if="errors?.description" class="mt-2 text-sm text-red-600">
+              {{ errors?.description }}
+            </p>
           </div>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
@@ -131,7 +138,7 @@
                 Навыки
               </label>
               <p class="mt-0.5 text-sm text-gray-500">
-                Укажите от 1 до 10 профессиональных навыков, которыми соискатель должен владеть.
+                Укажите профессиональные навыки, которыми соискатель должен владеть.
               </p>
               <multiselect
                 class="mt-1"

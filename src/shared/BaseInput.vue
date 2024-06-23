@@ -233,12 +233,11 @@ const onClear = () => {
 
   .control__field {
     .input {
-      @apply text-sm pt-1.5 pb-1.5 px-2.5;
+      @apply text-sm pt-1.5 pb-1.5 px-2.5 border border-gray-300;
       border-radius: 4px;
       flex: 1 0;
       width: 100%;
       box-shadow: none;
-      border: 1px solid #e8e8e8;
 
       &:focus {
         outline: 0;
