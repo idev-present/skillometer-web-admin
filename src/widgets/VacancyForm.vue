@@ -16,11 +16,20 @@
           </div>
           <div class="col-span-4">
             <div class="w-full relative">
-              <label
-                class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Описание вакансии
-              </label>
+              <div class="flex justify-between">
+                <label
+                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Описание вакансии
+                </label>
+                <div
+                  @click="generateDescription"
+                  class="flex mb-1 px-2 py-1 cursor-pointer text-sm rounded border border-blue-600 text-blue-600 hover:border-blue-700 hover:text-blue-700"
+                >
+                  <SparklesIcon class="h-5 w-5 text-blue-600 hover-group:border-blue-900 mr-1" />
+                  {{isLoadingGenerateDescription ? 'Генерируем...' : 'Сгенерировать через ИИ'}}
+                </div>
+              </div>
               <textarea
                 v-model="description"
                 class="h-20 shadow-sm block w-full focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none sm:text-sm border border-gray-300 rounded px-3 py-2"
@@ -60,9 +69,16 @@
             />
           </div>
         </div>
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+        <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-4">
-            <div class="col-span-4">
+            <div class="col-span-4 relative">
+              <div
+                @click="generateTodo"
+                class="absolute right-0 -top-1.5 flex mb-1 px-2 py-1 cursor-pointer text-sm rounded border border-blue-600 text-blue-600 hover:border-blue-700 hover:text-blue-700"
+              >
+                <SparklesIcon class="h-5 w-5 text-blue-600 hover-group:border-blue-900 mr-1" />
+                {{isLoadingGenerateTodo ? 'Генерируем...' : 'Сгенерировать через ИИ'}}
+              </div>
               <BaseContentEditor
                 label="Требования к кандидату"
                 v-model="todo"
@@ -72,8 +88,15 @@
             </div>
           </div>
         </div>
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-          <div class="col-span-4">
+        <div class="mt-9 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+          <div class="col-span-4 relative">
+            <div
+              @click="generateTeam"
+              class="absolute right-0 -top-1.5 flex mb-1 px-2 py-1 cursor-pointer text-sm rounded border border-blue-600 text-blue-600 hover:border-blue-700 hover:text-blue-700"
+            >
+              <SparklesIcon class="h-5 w-5 text-blue-600 hover-group:border-blue-900 mr-1" />
+              {{isLoadingGenerateTeam ? 'Генерируем...' : 'Сгенерировать через ИИ'}}
+            </div>
             <BaseContentEditor
               label="О компании"
               v-model="team"
@@ -206,7 +229,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseInput from '@/shared/BaseInput.vue'
-import BaseTextarea from '@/shared/BaseTextarea.vue'
 import { useDictionaryStore } from '@/app/store/modules/dictionary.js'
 import BaseSelect from '@/shared/BaseSelect.vue'
 import BaseCheckbox from '@/shared/BaseCheckbox.vue'
@@ -218,6 +240,7 @@ import VacancyForm from '@/app/forms/VacancyForm.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css"
+import { SparklesIcon } from '@heroicons/vue/24/outline'
 
 
 const vacancyStore = useVacancyStore()
@@ -371,6 +394,38 @@ const validateRange = (event) => {
     value = Math.max(0, Math.min(100, parseInt(value)));
   }
   range.value = value;
+}
+
+const isLoadingGenerateDescription = ref(false)
+const generateDescription = () => {
+  if(isLoadingGenerateDescription.value) {
+    return
+  }
+  isLoadingGenerateDescription.value = true
+  setTimeout(() => {
+    isLoadingGenerateDescription.value = false;
+  }, 5000);
+}
+
+const isLoadingGenerateTodo = ref(false)
+const generateTodo = () => {
+  if(isLoadingGenerateTodo.value) {
+    return
+  }
+  isLoadingGenerateTodo.value = true
+  setTimeout(() => {
+    isLoadingGenerateTodo.value = false;
+  }, 5000);
+}
+const isLoadingGenerateTeam = ref(false)
+const generateTeam = () => {
+  if(isLoadingGenerateTeam.value) {
+    return
+  }
+  isLoadingGenerateTeam.value = true
+  setTimeout(() => {
+    isLoadingGenerateTeam.value = false;
+  }, 5000);
 }
 
 onMounted(async() => {
