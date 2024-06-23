@@ -175,6 +175,20 @@
                 :taggable="true"
                 @tag="addTagSkill"
               />
+              <div v-if="proposedSkill?.length" class="flex flex-col text-sm py-2">
+                <label class="block text-sm leading-6 text-gray-900">
+                  Рекомендуемые навыки:
+                </label>
+                <div class="flex mt-0.5">
+                  <div v-for="(item, index) in proposedSkill"
+                       :key="index"
+                       class="cursor-pointer mr-2 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+                       @click="addSkill(item)"
+                  >
+                    {{item.name}}
+                  </div>
+                </div>
+              </div>
               <span v-if="errors?.skillSet" class="text-red-600 text-sm">
                 {{errors.skillSet}}
               </span>
@@ -289,6 +303,58 @@ const clearError = (field) => {
     errors.value[field] = "";
   }
 };
+
+const proposedSkill = computed(() => {
+  const recommendedSkills = [
+    {
+      id: 'javascript',
+      'name': 'JavaScript',
+      'type': 'hard',
+      'qualification_id': null,
+      'division_id': 'frontend_razrabotchik',
+      'habr_id': 264
+    },
+    {
+      id: "html",
+      "name": "HTML",
+      "type": "hard",
+      "qualification_id": null,
+      "division_id": "frontend_razrabotchik",
+      "habr_id": 1017
+    },
+    {
+      id: 'css',
+      'name': 'CSS',
+      'type': 'hard',
+      'qualification_id': null,
+      'division_id': 'frontend_razrabotchik',
+      'habr_id': 32
+    },
+    {
+      id: "typescript",
+      "name": "TypeScript",
+      "type": "hard",
+      "qualification_id": null,
+      "division_id": "frontend_razrabotchik",
+      "habr_id": 245
+    },
+    {
+      id: "react",
+      "name": "React",
+      "type": "hard",
+      "qualification_id": null,
+      "division_id": "frontend_razrabotchik",
+      "habr_id": 1070
+    }
+  ]
+  return recommendedSkills?.filter(recommendedSkill => {
+    return !(skill?.value?.some(selectedSkill => selectedSkill?.id === recommendedSkill.id));
+  }) || [];
+})
+
+const addSkill = (item) => {
+  skill.value.push(item)
+}
 
 const title = computed(() => {
   if (route.params?.operation === 'edit') {
