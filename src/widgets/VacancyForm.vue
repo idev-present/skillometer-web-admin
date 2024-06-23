@@ -187,7 +187,19 @@
                 :multiple="true"
                 :taggable="true"
                 @tag="addTagSkill"
-              />
+              >
+                <template #tag="{ option, remove }">
+                  <span class="multiselect__tag">
+                    <i class="absolute left-1.5 top-1">
+                      <StarIcon class="h-3.5 w-3.5 mr-1 cursor-pointer hover:text-yellow-400"
+                                :class="option.id === 'javascript' && 'text-yellow-400'"
+                      />
+                    </i>
+                    <span class="ml-3">{{ option.name }}</span>
+                    <i @click="remove(option)" tabindex="1" class="multiselect__tag-icon"></i>
+                  </span>
+                </template>
+              </multiselect>
               <div v-if="proposedSkill?.length" class="flex flex-col text-sm py-2">
                 <label class="block text-sm leading-6 text-gray-900">
                   Рекомендуемые навыки:
@@ -268,6 +280,9 @@ import LoadingIndicator from '@/shared/LoadingIndicator.vue'
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css"
 import { SparklesIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
+import {
+  StarIcon
+} from '@heroicons/vue/20/solid'
 
 
 const vacancyStore = useVacancyStore()
@@ -535,5 +550,7 @@ onMounted(async() => {
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
   margin-top: 0.2rem;
+}
+:deep(.multiselect__tag) {
 }
 </style>
