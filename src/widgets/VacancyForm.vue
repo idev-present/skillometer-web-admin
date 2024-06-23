@@ -5,7 +5,7 @@
         <h2 class="text-base font-semibold leading-7 text-gray-900">{{ title }}</h2>
         <p class="mt-1 text-sm leading-6 text-gray-600">Эта информация будет отображаться публично, поэтому будьте осторожны с тем, чем делитесь.</p>
 
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-4">
             <BaseInput
               :message="errors?.name"
@@ -24,7 +24,7 @@
             />
           </div>
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-2 sm:col-span-1">
             <BaseInput
               label="Зарплата от"
@@ -53,7 +53,7 @@
             />
           </div>
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-4">
             <div class="col-span-4">
               <BaseContentEditor
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-4">
             <BaseContentEditor
               label="О компании"
@@ -75,7 +75,7 @@
             />
           </div>
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="col-span-4">
             <BaseCombobox
               label="Город"
@@ -87,8 +87,8 @@
           </div>
 
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div class="sm:col-span-1 sm:col-start-1">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+          <div class="sm:col-span-2 sm:col-start-1">
             <BaseSelect
               label="Тип занятности"
               :items="employmentTypeList"
@@ -97,25 +97,14 @@
               @on-focus="clearError('employmentTypeId')"
             />
           </div>
-
-          <div class="sm:col-span-2">
-            <BaseCombobox
-              label="Специализация"
-              :items="divisionList"
-              v-model="division"
-              :message="errors?.divisionId"
-              @on-focus="clearError('divisionId')"
-            />
-          </div>
-
-          <div class="sm:col-span-2 mt-8">
+          <div class="sm:col-span-2 sm:mt-7">
             <BaseCheckbox
               label="Удаленная работа"
               v-model="isRemote"
             />
           </div>
         </div>
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
           <div class="sm:col-span-2 sm:col-start-1">
             <BaseCombobox
               label="Квалификация"
@@ -125,18 +114,64 @@
               @on-focus="clearError('qualificationId')"
             />
           </div>
-
           <div class="sm:col-span-2">
+            <BaseCombobox
+              label="Специализация"
+              :items="divisionList"
+              v-model="division"
+              :message="errors?.divisionId"
+              @on-focus="clearError('divisionId')"
+            />
+          </div>
+        </div>
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+          <div class="sm:col-span-4">
             <div class="col-span-4">
-              <BaseCombobox
-                multiple
-                label="Скилл"
-                :items="skillList"
+              <label class="block text-sm font-medium leading-6 text-gray-900">
+                Навыки
+              </label>
+              <p class="mt-0.5 text-sm text-gray-500">
+                Укажите от 1 до 10 профессиональных навыков, которыми соискатель должен владеть.
+              </p>
+              <multiselect
+                class="mt-1"
                 v-model="skill"
-                :message="errors?.skillSet"
-                @on-focus="clearError('skillSet')"
+                placeholder="Найдите или добавьте тег"
+                :show-labels="false"
+                label="name"
+                track-by="id"
+                :options="skillList"
+                :multiple="true"
+                :taggable="true"
+                @tag="addTagSkill"
               />
-              <span v-if="skill.length" class="text-sm text-gray-500">Выбрано: {{skill.length}}</span>
+              <span v-if="errors?.skillSet" class="text-red-600 text-sm">
+                {{errors.skillSet}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+          <div class="sm:col-span-4">
+            <label class="block text-sm font-medium leading-6 text-gray-900">
+              Соответствие навыков
+            </label>
+            <p class="mt-0.5 text-sm text-gray-500">
+              Укажите, минимальное соответствие навыков (Если соискатель наберет меньше указанного, то ему автоматички придет отказ)
+            </p>
+            <div class="flex items-center relative mb-6 mt-2">
+              <BaseInput
+                class="w-14 mr-4"
+                v-model="range"
+                @input="validateRange"
+              />
+              <div class="flex w-full relative mb-4">
+                <input id="labels-range-input" type="range" v-model="range" min="0" max="100"
+                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <span class="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">0%</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">50%</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">100%</span>
+              </div>
             </div>
           </div>
         </div>
@@ -174,6 +209,8 @@ import { useVacancyStore } from '@/app/store/modules/vacancy.js'
 import { decamelize } from '@/shared/utils/keyConverter.js'
 import VacancyForm from '@/app/forms/VacancyForm.js'
 import LoadingIndicator from '@/shared/LoadingIndicator.vue'
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css"
 
 
 const vacancyStore = useVacancyStore()
@@ -203,6 +240,7 @@ const skill = ref([])
 const qualification = ref(null)
 const id = ref(null)
 const loading = ref(false)
+const range = ref(50)
 const errors = ref({
   name: '',
   currency: '',
@@ -241,6 +279,10 @@ const buttonName = computed(() => {
   }
   return ''
 })
+
+const addTagSkill = (newTag) => {
+  skill.value.push(newTag)
+}
 
 const back = () => {
   router.push('/vacancies')
@@ -315,6 +357,15 @@ const fillFields = (data) => {
   qualification.value = data.qualification
 }
 
+const validateRange = (event) => {
+  let value = event.target.value;
+  value = value.replace(/\D/g, '');
+  if (value !== '') {
+    value = Math.max(0, Math.min(100, parseInt(value)));
+  }
+  range.value = value;
+}
+
 onMounted(async() => {
   if(route.params?.operation === 'edit' && route.params?.id) {
     await vacancyStore.getVacancy(route.params.id)
@@ -322,3 +373,26 @@ onMounted(async() => {
   }
 })
 </script>
+
+<style scoped>
+:deep(.multiselect__input) {
+  font-size: 14px;
+  outline: none;
+  box-shadow: none;
+}
+:deep(.multiselect__tags) {
+  @apply block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6;
+}
+:deep(.multiselect__option) {
+  font-size: 0.875rem;
+  height: 30px;
+  &:after {
+    display: none;
+  }
+}
+:deep(.multiselect__single) {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  margin-top: 0.2rem;
+}
+</style>
