@@ -101,7 +101,7 @@ const timeline = computed(() => {
     target: replyStatusList?.value?.find((e) => e.key === item?.text) || '',
     type: item?.type === 'REPLY_STATUS' ? eventTypes.advanced : eventTypes.advanced,
   })) || []
-  return resDefault.concat(resActivity || [])
+  return resActivity.concat(resDefault || [])
 })
 
 const eventTypes = {
