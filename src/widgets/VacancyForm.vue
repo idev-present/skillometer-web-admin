@@ -177,6 +177,7 @@
                 Укажите профессиональные навыки, которыми соискатель должен владеть.
               </p>
               <multiselect
+                v-if="skillList"
                 class="mt-1"
                 v-model="skill"
                 placeholder="Найдите или добавьте тег"
@@ -376,7 +377,7 @@ const proposedSkill = computed(() => {
     }
   ]
   return recommendedSkills?.filter(recommendedSkill => {
-    return !(skill?.value?.some(selectedSkill => selectedSkill?.id === recommendedSkill.id));
+    return !(skill?.value?.some(selectedSkill => selectedSkill?.id === recommendedSkill?.id));
   }) || [];
 })
 
