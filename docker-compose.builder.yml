@@ -5,7 +5,7 @@ services:
       args:
         ENV: staging
     container_name: skillometer-web-admin
-    image: ilyamachetto/skillometer-web-admin:0.8.1
+    image: ilyamachetto/skillometer-web-admin:0.9.1
     platform: linux/amd64
     env_file:
       - .env.staging
