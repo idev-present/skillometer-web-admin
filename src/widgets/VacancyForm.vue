@@ -192,10 +192,10 @@
                   <span class="multiselect__tag">
                     <i class="absolute left-1.5 top-1">
                       <StarIcon class="h-3.5 w-3.5 mr-1 cursor-pointer hover:text-yellow-400"
-                                :class="option.id === 'javascript' && 'text-yellow-400'"
+                                :class="option?.id === 'javascript' && 'text-yellow-400'"
                       />
                     </i>
-                    <span class="ml-3">{{ option.name }}</span>
+                    <span class="ml-3">{{ option?.name || '' }}</span>
                     <i @click="remove(option)" tabindex="1" class="multiselect__tag-icon"></i>
                   </span>
                 </template>
